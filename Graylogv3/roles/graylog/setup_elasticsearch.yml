@@ -23,8 +23,9 @@
 - name: Replace cluster.name
   lineinfile:
     path: '/etc/elasticsearch/elasticsearch.yml'
-    regexp: '^#cluster.name:'
+    regexp: '^(.*)cluster.name:(.*)$'
     line: 'cluster.name: {{ es_cluster_name }}'
+    backrefs: yes
 
 - name: Add ES option
   lineinfile:
