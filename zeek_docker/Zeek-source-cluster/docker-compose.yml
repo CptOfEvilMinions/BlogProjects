@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-zeek-cluster-manager
-      args: 
+      args:
         zeek_interface: 'ens18'
     volumes:
       - zeek-manager-logs:/opt/bro/logs

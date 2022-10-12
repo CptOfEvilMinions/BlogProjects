@@ -3,7 +3,7 @@ FROM ubuntu:18.04 as zeek-manager
 # Build args
 ARG zeek_interface=eth0
 
-# Install 
+# Install
 RUN apt-get update -y && apt-get install wget net-tools supervisor vim libpcap-dev -y
 
 # Copy Zeek from build

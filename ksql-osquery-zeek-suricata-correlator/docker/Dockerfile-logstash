@@ -1,10 +1,10 @@
 FROM docker.elastic.co/logstash/logstash:7.5.0
 
 # Install plugins
-RUN /usr/share/logstash/bin/logstash-plugin install logstash-output-syslog 
+RUN /usr/share/logstash/bin/logstash-plugin install logstash-output-syslog
 
 # COPY configs
-RUN rm -rf /usr/share/logstash/pipeline/logstash.conf 
+RUN rm -rf /usr/share/logstash/pipeline/logstash.conf
 COPY conf/logstash/logstash.yml /usr/share/logstash/config/logstash.yml
 COPY conf/logstash/02-inputs-beats.conf /usr/share/logstash/pipeline/02-inputs-beats.conf
 COPY conf/logstash/30-output-rsyslog.conf /usr/share/logstash/pipeline/30-output-rsyslog.conf

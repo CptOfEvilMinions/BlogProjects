@@ -10,7 +10,7 @@ services:
   #     - 'SPLUNK_PASSWORD=changeme'
   #   ports:
   #     - 8000:8000
-  #   networks: 
+  #   networks:
   #     - default
   #     - logging-backend
   #   depends_on:
@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
     ports:
       - 1514:1514/udp
-    networks: 
+    networks:
       - default
       - logging-backend
       - kafka-backend
@@ -35,7 +35,7 @@ services:
       - kafka
     cpus: 2
     mem_limit: 150M
-  
+
   ############################################ Logstash server ############################################
   logstash:
     container_name: logstash
@@ -45,7 +45,7 @@ services:
     restart: unless-stopped
     ports:
       - 5044:5044
-    networks: 
+    networks:
       - default
       - logging-backend
       - kafka-backend
@@ -54,7 +54,7 @@ services:
       - rsyslog
     cpus: 2
     mem_limit: 300M
-    
+
   ############################################ Zookeeper ############################################
   zookeeper:
     container_name: zookeeper
@@ -62,11 +62,11 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 32181
       ZOOKEEPER_TICK_TIME: 2000
-    networks: 
+    networks:
       - kafka-backend
     cpus: 1
     mem_limit: 150M
-  
+
   ############################################ Kafka server ############################################
   kafka:
     container_name: kafka
@@ -101,19 +101,19 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:32181
-    networks: 
+    networks:
       - kafka-backend
     depends_on:
       - zookeeper
       - kafka
     cpus: 1
     mem_limit: 300M
-  
+
   ############################################ KSQL server ############################################
   ksql-server:
     container_name: ksql-server
     image: "confluentinc/cp-ksql-server:5.3.0"
-    networks: 
+    networks:
       - kafka-backend
     environment:
       KSQL_BOOTSTRAP_SERVERS: kafka:39092
@@ -140,6 +140,6 @@ services:
     cpus: 1
     mem_limit: 100M
 
-networks: 
+networks:
   kafka-backend:
   logging-backend:

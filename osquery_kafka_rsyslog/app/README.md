@@ -7,8 +7,8 @@
 ## Container build
 1. `cp config/config.py.example config/config.py`
 1. `vim config/config.py` and set:
-    1.  
-    1. 
+    1.
+    1.
 1. `docker build -t python-app .`
 
 ## Supported Python versions

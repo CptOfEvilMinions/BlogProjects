@@ -43,7 +43,7 @@
 
 - name: Generate DHParam
   openssl_dhparam:
-    path: /etc/nginx/ssl/dhparam.pem 
+    path: /etc/nginx/ssl/dhparam.pem
     size: 4096
 
 - name: "generate ssl private key file"
@@ -72,8 +72,8 @@
     provider: selfsigned
 
 - name: Restart nginx to activate letsencrypt site
-  service: 
-    name: nginx 
+  service:
+    name: nginx
     state: restarted
     enabled: yes
 

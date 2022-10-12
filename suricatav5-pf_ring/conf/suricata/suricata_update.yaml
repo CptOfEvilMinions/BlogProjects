@@ -1,14 +1,14 @@
 # Configuration with disable filters.
-disable-conf: {{ suricata_rules_dir }}/disable.conf
+disable-conf: "{{ suricata_rules_dir }}/disable.conf"
 
 # Configuration with enable filters.
-enable-conf: {{ suricata_rules_dir }}/enable.conf
+enable-conf: "{{ suricata_rules_dir }}/enable.conf"
 
 # Configuration with drop filters.
-drop-conf: {{ suricata_rules_dir }}/drop.conf
+drop-conf: "{{ suricata_rules_dir }}/drop.conf"
 
 # Configuration with modify filters.
-modify-conf: {{ suricata_rules_dir }}/modify.conf
+modify-conf: "{{ suricata_rules_dir }}/modify.conf"
 
 # List of files to ignore. Overrided by the --ignore command line option.
 ignore:
@@ -39,4 +39,4 @@ sources:
 # directory or a wild card specification.
 local:
   # A wildcard directory of rules.
-  - {{ suricata_rules_dir }}/*.rules
+  - "{{ suricata_rules_dir }}/*.rules"

@@ -6,6 +6,6 @@ timezone: America/New_York
 # Cert generation
 cert_country:
 cert_state:
-cert_local: 
+cert_local:
 cert_org:
 cert_name:

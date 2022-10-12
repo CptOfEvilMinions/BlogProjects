@@ -10,7 +10,7 @@ This repo has been updated on 5-23-2020
 
 ## .env
 The Docker images are pinned to the following version below. If you want a different version please update `.env`.
-All the configs in this directory have been configured and tested to work with the versions pinned below. 
+All the configs in this directory have been configured and tested to work with the versions pinned below.
 ```
 NGINX_VERSION=1.18.0-alpine
 ELASTIC_VERSRION=7.7.0
@@ -47,4 +47,3 @@ ELASTIC_VERSRION=7.7.0
 * [Dev-Dipesh/ELK with Nginx.md](https://gist.github.com/Dev-Dipesh/2ac30a8a01afb7f65b2192928a875aa1)
 * [How To Create a Self-Signed SSL Certificate for Nginx in Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-18-04)
 * []()
-

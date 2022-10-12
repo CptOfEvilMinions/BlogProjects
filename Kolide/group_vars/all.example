@@ -7,7 +7,7 @@ slack_channel:
 slack_token:
 
 # Cert Generation
-cert_country: 
+cert_country:
 cert_state:
 cert_local:
 cert_org:

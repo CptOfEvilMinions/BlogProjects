@@ -2,7 +2,7 @@ version: '3.3'
 services:
   osquery-client:
     image: osquery-client
-    networks: 
+    networks:
       - kolide_kolide-backend
     configs:
       - source: nginx-cert
@@ -11,7 +11,7 @@ services:
         target: /etc/osquery/osquery.conf
       - source: osquery-flags
         target: /etc/osquery/osquery.flags
-    
+
 configs:
   nginx-cert:
     file: ./conf/nginx/certs/kolide.crt
@@ -20,7 +20,6 @@ configs:
   osquery-flags:
     file: ./conf/osquery/osquery.flags
 
-networks: 
+networks:
   kolide_kolide-backend:
     external: true
-  

@@ -26,7 +26,7 @@ The SHA1 hash for each command above should be the same. [If the outputs of the 
 
 ### Validate server public cert + server private key + root CA
 1. `openssl verify -CAfile ../conf/tls/root_ca/*.crt ../conf/tls/kolide/*.crt`
-  1. Verify the certificate chain by using the Root CA certificate file while validating the server certificate 
+  1. Verify the certificate chain by using the Root CA certificate file while validating the server certificate
 1. ``
 
 ## References

@@ -101,8 +101,8 @@
   when: suricata_conf_dir_stat.stat.exists
 
 - name: Check if {{ suricata_username }} user exists
-  getent: 
-    database: 'passwd' 
+  getent:
+    database: 'passwd'
     key: '{{ suricata_username }}'
   ignore_errors: true
   register: user_stats
@@ -112,8 +112,8 @@
   when: user_stats is failed
 
 - name: Check if {{ suricata_username }} user exists, fail if it fails
-  getent: 
-    database: 'passwd' 
+  getent:
+    database: 'passwd'
     key: '{{ suricata_username }}'
 
 - name: Allow Suricata user to write to log directory
@@ -145,7 +145,7 @@
   sysvinit:
     name: 'suricata'
     state: started
-    
+
 - name: Restart Suricata
   service:
     name: 'suricata'

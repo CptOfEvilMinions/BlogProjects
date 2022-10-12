@@ -27,7 +27,7 @@
       "insecure_skip_tls_verify": "{{ user `proxmox_skip_tls_verify` }}",
       "username": "{{ user `proxmox_username` }}",
       "password": "{{ user `proxmox_password` }}",
- 
+
       "vm_name": "{{ user `vm_name` }}",
       "template_description": "{{ user `template_description` }}",
 
@@ -69,8 +69,8 @@
           "iso_url": "ISO-storage:iso/virtio-win-0.1.185.iso",
           "unmount": true
         }
-      ], 
-   
+      ],
+
       "communicator": "winrm",
       "winrm_username": "{{ user `winrm_username` }}",
       "winrm_password": "{{ user `winrm_password` }}",
@@ -78,7 +78,7 @@
       "winrm_use_ssl": true
 
     }
-    
+
   ],
 
   "provisioners": [

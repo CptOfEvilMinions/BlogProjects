@@ -3,7 +3,7 @@ services:
   rsyslog:
     build: .
     restart: unless-stopped
-    networks: 
+    networks:
       - default
       - kafka-backend
     ports:
@@ -30,7 +30,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks: 
+    networks:
       - kafka-backend
     depends_on:
       - zookeeper

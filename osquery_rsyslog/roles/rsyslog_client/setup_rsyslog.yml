@@ -1,9 +1,9 @@
 ####################################################################
-# Install Rsyslog 
+# Install Rsyslog
 ####################################################################
-- name: Add ppa:adiscon/v8-stable 
+- name: Add ppa:adiscon/v8-stable
   apt_repository:
-    repo: ppa:adiscon/v8-stable 
+    repo: ppa:adiscon/v8-stable
     state: present
 
 - name: Run the equivalent of "apt-get update" as a separate step
@@ -28,7 +28,7 @@
     mode: 0400
 
 ####################################################################
-# Setup Rsyslog 
+# Setup Rsyslog
 ####################################################################
 - name: Copy rsyslog configs
   template:

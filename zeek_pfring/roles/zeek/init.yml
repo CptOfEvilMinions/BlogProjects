@@ -4,13 +4,13 @@
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
-    force_apt_get: True  
+    force_apt_get: True
 
 - name: Upgrade all packages to the latest version
   apt:
     name: "*"
     state: latest
-    force_apt_get: True  
+    force_apt_get: True
 
 - name: Disable kernel updates
   shell: 'apt-mark hold linux-image-generic linux-headers-generic'
@@ -19,7 +19,7 @@
 #  Setup Timedatectl
 ####################################################################
 - name: Set time to {{ timezone }}
-  timezone: 
+  timezone:
     name: '{{ timezone }}'
 
 ####################################################################
@@ -43,7 +43,7 @@
   apt:
     name: ['apt-transport-https','openjdk-8-jre-headless','uuid-runtime','pwgen']
     state: latest
-    force_apt_get: True  
+    force_apt_get: True
 
 ####################################################################
 #  Slack notification

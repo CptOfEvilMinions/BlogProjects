@@ -17,7 +17,7 @@ services:
     image: splunk/splunk:7.3.2
     container_name: 'splunk-siem'
     restart: unless-stopped
-    networks: 
+    networks:
       - logging-backend
     environment:
       - 'SPLUNK_START_ARGS=--accept-license'
@@ -36,7 +36,7 @@ services:
       dockerfile: Dockerfile-rsyslog
     ports:
       - 1514:1514/udp
-    networks: 
+    networks:
       - default
       - kafka-backend
       - logging-backend
@@ -51,7 +51,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    networks: 
+    networks:
       - kafka-backend
     cpus: 1
     mem_limit: 150M
@@ -70,7 +70,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_DOCKER_NETWORK:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_DOCKER_NETWORK
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks: 
+    networks:
       - default
       - kafka-backend
     #ports:

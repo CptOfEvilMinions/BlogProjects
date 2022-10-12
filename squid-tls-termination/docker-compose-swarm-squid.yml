@@ -1,5 +1,5 @@
 version: "3.9"
-services: 
+services:
   squid:
     image: squid-tls-termination:latest
     configs:
@@ -14,7 +14,7 @@ services:
         target: /etc/ssl/CA/cacert.crt
       - source: squid-client-int-ca
         target: /etc/ssl/CA/client-ca.crt
-    #networks: 
+    #networks:
     #  #- default
     ports:
       - 3128:3128
@@ -35,7 +35,7 @@ services:
         delay: 5s
         max_attempts: 10
         window: 120s
-    
+
 configs:
   squid-config:
     file: conf/squid/squid.conf
@@ -55,8 +55,8 @@ secrets:
     #  file: ./conf/tls/proxy_int.crt
   squid-client-int-ca:
     external: true
-  
 
-volumes: 
+
+volumes:
   squid-cahce:
   squid-logs:

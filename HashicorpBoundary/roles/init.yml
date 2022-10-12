@@ -25,7 +25,7 @@
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
-    
+
 - name: Update all packages to the latest version
   apt:
     upgrade: dist
@@ -36,7 +36,7 @@
 - name: Reboot a slow machine that might have lots of updates to apply
   reboot:
     reboot_timeout: 3600
-    
+
 ####################################################################
 # Install software
 ####################################################################

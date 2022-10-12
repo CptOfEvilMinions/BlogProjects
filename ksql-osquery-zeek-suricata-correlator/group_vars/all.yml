@@ -13,5 +13,5 @@ logstash_ip_addr: '10.150.100.210'
 logstash_port: 5044
 
 ################################## Slack ##################################
-slack_channel: 
+slack_channel:
 slack_token:

@@ -1,7 +1,7 @@
 FROM alpine:3.8
 
 # Create user
-RUN addgroup -S app && adduser -S -G app app 
+RUN addgroup -S app && adduser -S -G app app
 
 # Install things
 RUN apk update && apk add python3

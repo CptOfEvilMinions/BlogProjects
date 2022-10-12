@@ -8,7 +8,7 @@
 
 --enroll_secret_path=fb-test-server/tests/test_enroll_secret.txt
 --enroll_tls_endpoint=/enroll
- 
+
 --config_plugin=tls
 --config_tls_endpoint=/config
 --config_refresh=10

@@ -1,4 +1,4 @@
-# 
+#
 
 ## Generate cert for NGINX
 1. `openssl req -newkey rsa:2048 -nodes -keyout conf/nginx/ssl/splunk.key -x509 -days 365 -out conf/nginx/ssl/splunk.crt`

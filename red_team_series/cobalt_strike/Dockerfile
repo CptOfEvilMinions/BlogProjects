@@ -16,7 +16,7 @@ RUN cd /opt && unzip /opt/cobaltstrike.zip
 WORKDIR /opt/cobaltstrike
 
 ##### Expose ports #####
-EXPOSE 53/udp 80 443 8080 50050 
+EXPOSE 53/udp 80 443 8080 50050
 
 ##### Run Cobalt Strike #####
 ENTRYPOINT ["./teamserver"]

@@ -1,65 +1,65 @@
 version: "2.2"
-services: 
+services:
   ################################################## NGINX ##################################################
   nginx:
-    build: 
+    build:
       context: .
       dockerfile: docker/Dockerfile-nginx
     container_name: kolide-nginx
     restart: unless-stopped
-    ports: 
+    ports:
       - 8000:80
       - 8443:443
-    networks: 
+    networks:
       - default
       - kolide-backend
-    depends_on: 
+    depends_on:
       - kolide
 
   ################################################## Kolide ##################################################
   kolide:
-    build: 
+    build:
       context: .
       dockerfile: docker/Dockerfile-kolide
-    #scale: 3 
+    #scale: 3
     restart: unless-stopped
-    volumes: 
+    volumes:
       - kolide-logs:/var/log/osquery
-    networks: 
+    networks:
       - kolide-backend
     depends_on:
       - mysql
       - redis
-  
+
   ################################################## MySQL ##################################################
   mysql:
-    build: 
+    build:
       context: .
       dockerfile: docker/Dockerfile-mysql
     container_name: kolide-mysql
     restart: unless-stopped
-    environment: 
+    environment:
       MYSQL_ROOT_PASSWORD: kolide
       MYSQL_DATABASE: kolide
       MYSQL_USER: kolide
       MYSQL_PASSWORD: kolide
-    volumes: 
+    volumes:
       - mysql-db:/var/lib/mysql
-    networks: 
+    networks:
       - kolide-backend
-  
+
   ################################################## Redis ##################################################
   redis:
     image: redis:latest
     container_name: kolide-redis
     restart: unless-stopped
-    networks: 
-      - kolide-backend 
+    networks:
+      - kolide-backend
 
 
-volumes: 
+volumes:
   mysql-db:
   kolide-logs:
 
-networks: 
+networks:
   kolide-backend:

@@ -7,11 +7,11 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    networks: 
+    networks:
       - kafka-backend
     cpus: 1
     mem_limit: 150M
-  
+
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka-encricher-kafka
@@ -25,7 +25,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks: 
+    networks:
       - default
       - kafka-backend
     ports:

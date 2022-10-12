@@ -1,21 +1,21 @@
 ####################################################################
-# Install sofrware 
+# Install sofrware
 ####################################################################
 - name: Install dependencies for Zeek
   package:
     name: '{{ item }}'
     state: latest
   with_items:
-    - cmake 
-    - make 
-    - gcc 
-    - g++ 
-    - flex 
-    - bison 
-    - libpcap-dev 
-    - libssl-dev 
-    - python-dev 
-    - swig 
+    - cmake
+    - make
+    - gcc
+    - g++
+    - flex
+    - bison
+    - libpcap-dev
+    - libssl-dev
+    - python-dev
+    - swig
     - zlib1g-dev
 
 ####################################################################
@@ -36,10 +36,10 @@
 ####################################################################
 # Install/Setup GeoIP
 #
-# If you see an error message similar to “Bro was not configured for GeoIP support”, 
-# then you need to rebuild Bro and make sure it is linked against libmaxminddb. Normally, 
-# if libmaxminddb is installed correctly then it should automatically be found when 
-# building Bro. If this doesn’t happen, then you may need to specify the path to the 
+# If you see an error message similar to “Bro was not configured for GeoIP support”,
+# then you need to rebuild Bro and make sure it is linked against libmaxminddb. Normally,
+# if libmaxminddb is installed correctly then it should automatically be found when
+# building Bro. If this doesn’t happen, then you may need to specify the path to the
 # libmaxminddb installation (e.g. ./configure --with-geoip=<path>).
 #
 # https://docs.zeek.org/en/stable/frameworks/geoip.html
@@ -51,7 +51,7 @@
   when: zeek_geoip == True
 
 - name: Install libmaxminddb
-  package: 
+  package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -88,7 +88,7 @@
   shell: './bro -e "print lookup_location(8.8.8.8);"'
   args:
     chdir: '{{ zeek_base }}/bin'
-  when: zeek_geoip == True 
+  when: zeek_geoip == True
 
 ####################################################################
 # Create Zeek user and set perms
@@ -132,7 +132,7 @@
   with_items:
     - 'networks.cfg'
     - 'node.cfg'
-  
+
 - name: Replace Zeek e-mail
   lineinfile:
     path: '{{ zeek_base }}/etc/broctl.cfg'
@@ -167,7 +167,7 @@
     - '@load policy/frameworks/files/extract-all-files.bro'
   when: zeek_file_extraction == True
 
-- name: Enable Zeek stats 
+- name: Enable Zeek stats
   lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '{{ item }}'
@@ -186,7 +186,7 @@
     - 'conf/zeek/scripts/*'
   when: zeek_custom_scripts == True
 
-- name: Add commnet for custom scripts 
+- name: Add commnet for custom scripts
   lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '# Zeek custom scripts'

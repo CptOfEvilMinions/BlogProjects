@@ -7,18 +7,18 @@
     state: latest
   with_items:
     - 'cmake'
-    - 'make' 
-    - 'gcc' 
-    - 'g++' 
-    - 'flex' 
-    - 'bison' 
-    - 'libpcap-dev' 
-    - 'libssl-dev' 
-    - 'python-dev' 
-    - 'swig' 
+    - 'make'
+    - 'gcc'
+    - 'g++'
+    - 'flex'
+    - 'bison'
+    - 'libpcap-dev'
+    - 'libssl-dev'
+    - 'python-dev'
+    - 'swig'
     - 'zlib1g-dev'
     - 'libgeoip-dev'
-    - 'build-essential' 
+    - 'build-essential'
     - 'libelf-dev'
 
 ################################################################
@@ -75,7 +75,7 @@
     chdir: '{{ pf_ring_dir }}/kernel'
   with_items:
     - 'make'
-    - 'make install'  
+    - 'make install'
 
 ################################################################
 # Add pf_ring on boot

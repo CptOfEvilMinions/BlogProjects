@@ -17,7 +17,7 @@
 1. Browse to `https://<docker IP>`
 1. Setup User
     1. Enter `admin` for username
-    1. Enter password   
+    1. Enter password
     1. Re-enter password
     1. Enter e-mail
 1. Setup organization
@@ -29,9 +29,9 @@
 ## Osquery scale test
 1. `docker build --build-arg osquery_enroll_secret="<Kolide auth key>" -f Dockerfile-osquery -t osquery-client .`
 1. `docker stack deploy --compose-file docker-compose-osquery-test-stack.yml osquery-scale-test`
-1. `docker service scale osquery-scale-test_osquery-client=100` 
+1. `docker service scale osquery-scale-test_osquery-client=100`
 
-## References 
+## References
 ### Kolide
 * [Kolide Fleet on Ubuntu](https://github.com/kolide/fleet/blob/master/docs/infrastructure/fleet-on-ubuntu.md)
 * [Github - Kolide NGINX config](https://github.com/Benster900/BlogProjects/blob/master/Kolide/conf/nginx/nginx_kolide.conf)
@@ -50,7 +50,7 @@
 * [NGINX websockets](https://www.nginx.com/blog/websocket-nginx/)
 * [Nginx reverse proxy unavailable upstreams in Docker](https://ilhicas.com/2018/04/14/Nginx-Upstream-Unavalailble-Docker.html)
 
-### MySQL 
+### MySQL
 * [StackOverFlow - Check if table exists without using “select from”](https://stackoverflow.com/questions/8829102/check-if-table-exists-without-using-select-from)
 * [MySQL ‘show tables’: How do I list the tables in a MySQL database?](https://alvinalexander.com/blog/post/mysql/list-tables-in-mysql-database)
 

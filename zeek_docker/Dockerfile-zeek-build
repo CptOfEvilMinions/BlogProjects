@@ -12,7 +12,7 @@ RUN cd /tmp && git clone --recursive https://github.com/zeek/zeek
 RUN cd /tmp/zeek && \
     ./configure --prefix=/opt/bro/ && \
     make && \
-    make install 
+    make install
 
 # Delete Zeek download
 RUN rm -rf /tmp/zeek

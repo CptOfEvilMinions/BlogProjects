@@ -5,7 +5,7 @@
   user:
     name: kolide
     shell: /usr/sbin/nologin
-    
+
 - name: Create Kolide log directory
   file:
     path: '{{ log_dir }}'

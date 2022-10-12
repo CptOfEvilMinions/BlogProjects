@@ -16,14 +16,14 @@ RUN cd /tmp && \
 # Create Kolide dir
 RUN mkdir /etc/kolide
 RUN mkdir /var/log/kolide
-RUN chown kolide:kolide /var/log/kolide 
+RUN chown kolide:kolide /var/log/kolide
 
 # Setup entrypoint
 COPY conf/kolide/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Change user
-USER kolide 
+USER kolide
 
 # Run Kolide
 ENTRYPOINT [ "/entrypoint.sh" ]

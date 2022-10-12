@@ -1,10 +1,10 @@
 ####################################################################
 # Install/Setup Fileabeat
 ####################################################################
-# - name: Download Filebeat 
+# - name: Download Filebeat
 #   win_get_url:
 #     url: 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.5.0-windows-x86_64.zip'
-#     dest: '%USERPROFILE%\AppData\Local\filebeat-7.5.0-windows-x86_64.zip' 
+#     dest: '%USERPROFILE%\AppData\Local\filebeat-7.5.0-windows-x86_64.zip'
 
 # - name: Unzip filebeat
 #   win_unzip:
@@ -34,7 +34,7 @@
     name: filebeat
     state: restarted
     start_mode: auto
-  
+
 
 ####################################################################
 # Slack notification

@@ -9,6 +9,6 @@ services:
       - NET_ADMIN
     volumes:
       - zeek-logs:/opt/bro/logs
-    
+
 volumes:
   zeek-logs:

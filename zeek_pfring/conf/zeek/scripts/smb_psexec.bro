@@ -2,8 +2,8 @@
 @load base/frameworks/notice
 @load base/protocols/smb
 
-export 
-{  
+export
+{
     redef enum Notice::Type += {  Match  };
     global isTrusted = T;
     global trustedIPs: set[addr] = {192.168.1.1,192.168.1.10} &redef;
@@ -41,5 +41,5 @@ export
                     }
             }
     }
-    
+
 }

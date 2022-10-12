@@ -7,7 +7,7 @@
 1. `git clone https://github.com/CptOfEvilMinions/BlogProjects.git`
 1. `cd BlogProjects/Graylogv3`
 
-### Docker 
+### Docker
 1. `docker-compose up -d`
 
 ### Ansible

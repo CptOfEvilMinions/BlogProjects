@@ -12,7 +12,7 @@ services:
         - BOUNDARY_VERSION=${BOUNDARY_VERSION}
         - BASE_DOMAIN=hackinglab.local
         - VAULT_ADDR=https://vault.hackinglab.local:443
-    environment: 
+    environment:
       - VAULT_KMS_ROOT_TOKEN=s.UvrhSDojoB8FZWVhaM85ur9m
       - VAULT_KMS_WORKER_TOKEN=s.P13b1wfHO6aUMrCFVjt1KkjI
       - VAULT_KMS_RECOVERY_TOKEN=s.lzTP7KKDTYJZy2clja1Zkff8
@@ -28,7 +28,7 @@ services:
   boundary-worker01:
     container_name: 'boundary-worker01'
     restart: unless-stopped
-    environment: 
+    environment:
       - VAULT_KMS_WORKER_TOKEN="s.P13b1wfHO6aUMrCFVjt1KkjI"
     build:
       context: .

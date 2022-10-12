@@ -106,11 +106,11 @@
     chdir: '{{ pfring_dir }}/userland/lib'
   when: not libpfring_stat.stat.exists
 
-- name: Make Libpfring 
+- name: Make Libpfring
   make:
     chdir: '{{ pfring_dir }}/userland/lib'
   when: not libpfring_stat.stat.exists
-  
+
 - name: Make install Libpfring
   make:
     chdir: '{{ pfring_dir }}/userland/lib'
@@ -131,11 +131,11 @@
     chdir: '{{ pfring_dir }}/userland/libpcap'
   when: not libpcap_stat.stat.exists
 
-- name: Make Libpcap 
+- name: Make Libpcap
   make:
     chdir: '{{ pfring_dir }}/userland/libpcap'
   when: not libpcap_stat.stat.exists
-  
+
 - name: Make install Libpcap
   make:
     chdir: '{{ pfring_dir }}/userland/libpcap'

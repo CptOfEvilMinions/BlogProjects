@@ -9,7 +9,7 @@ services:
       - osquery_kafka_rsyslog_kafka-backend
     cpu_count: 1
     mem_limit: 100M
-  
+
 networks:
   osquery_kafka_rsyslog_kafka-backend:
     driver: overlay

@@ -10,7 +10,7 @@ services:
     volumes:
       - zeek-logs:/opt/bro/logs
       - zeek-configs:/opt/bro/etc
-    
+
 volumes:
   zeek-logs:
   zeek-configs:

@@ -7,7 +7,7 @@ services:
       dockerfile: docker/Dockerfile-vault
     container_name: 'vault-app'
     restart: unless-stopped
-    networks: 
+    networks:
       - default
       - vault-backend
     ports:
@@ -32,13 +32,13 @@ services:
       dockerfile: docker/Dockerfile-consul
     container_name: 'vault-consul'
     restart: unless-stopped
-    networks: 
+    networks:
       #- default
       - vault-backend
     volumes:
       - consul-data:/consul/data
 
-volumes: 
+volumes:
   consul-config:
   consul-data:
   vault-config:
@@ -46,5 +46,5 @@ volumes:
   vault-data:
   vault-logs:
 
-networks: 
+networks:
   vault-backend:

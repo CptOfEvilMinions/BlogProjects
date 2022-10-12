@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Install squid
-RUN apk -U add ca-certificates libressl && apk add squid 
+RUN apk -U add ca-certificates libressl && apk add squid
 
 #USER squid
 #CMD ["/usr/sbin/squid", "-f", "/etc/squid/squid.conf"]

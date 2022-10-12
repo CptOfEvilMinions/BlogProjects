@@ -17,7 +17,7 @@ This blog post is going to cover how to ingest OSquery logs with Rsyslog v8. Mos
 1. `mv group_vars/logging.yml.example group_vars/logging.yml`
     1. `rsyslog_host` - FQDN/IP address of Rsyslog server
     1. `rsyslog_port` - Port to ingest logs
-    1. `rsyslog_input_module` - Module for Rsyslog to ingest logs 
+    1. `rsyslog_input_module` - Module for Rsyslog to ingest logs
         1. Default set to `imrelp`
     1. `rsyslog_output_module` - Module for Rsyslog to send logs
         1. Default set to `omrelp`
@@ -46,7 +46,7 @@ This blog post is going to cover how to ingest OSquery logs with Rsyslog v8. Mos
 1. `tcpdump port 1514` - Check connection between server and client
 
 
-## Supported OSes 
+## Supported OSes
 * Ubuntu Server 18.04 64-bit
 
 ## Resources/Sources

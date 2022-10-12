@@ -1,6 +1,6 @@
 ################################# Rsyslog server #################################
 rsyslog_host: ''
-rsyslog_port: 
+rsyslog_port:
 
 
 rsyslog_input_module: 'imrelp'

@@ -1,18 +1,18 @@
 version: "2.2"
-services: 
+services:
   ############################################# NGINX #############################################
   nginx:
     build:
       context: .
       dockerfile: docker/Dockerfile-nginx
-      args: 
+      args:
         NGINX_VERSION: ${NGINX_VERSION}
     container_name: 'elk-nginx'
     restart: unless-stopped
     ports:
       - 8000:80
       - 8443:443
-    networks: 
+    networks:
       - default
       - es-backend
     cpus: 2
@@ -23,13 +23,13 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile-logstash
-      args: 
+      args:
         LOGSTASH_VERSION: ${ELASTIC_VERSRION}
     container_name: 'elk-logstash'
     restart: unless-stopped
     ports:
       - 5044:5044
-    networks: 
+    networks:
       - default
       - es-backend
     cpus: 2
@@ -40,7 +40,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile-elasticsearch
-      args: 
+      args:
         ELASTICSEARCH_VERSION: ${ELASTIC_VERSRION}
     container_name: 'elk-elasticsearch'
     restart: unless-stopped
@@ -48,27 +48,27 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     volumes:
       - es-data:/usr/share/elasticsearch/data
-    networks: 
+    networks:
       - es-backend
     cpus: 2
     mem_limit: 1G
-    
+
   ############################################# Kibana #############################################
   kibana:
     build:
       context: .
       dockerfile: docker/Dockerfile-kibana
-      args: 
+      args:
         KIBANA_VERSION: ${ELASTIC_VERSRION}
     container_name: 'elk-kibana'
     restart: unless-stopped
-    networks: 
+    networks:
       - es-backend
     cpus: 2
     mem_limit: 1G
 
-volumes: 
+volumes:
   es-data:
 
-networks: 
+networks:
   es-backend:

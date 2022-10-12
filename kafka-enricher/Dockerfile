@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 # Add user
 RUN useradd -ms /bin/bash appuser
 
-# Install things 
+# Install things
 RUN apt-get update -y && apt-get install python3 python3-pip python3-dev gcc -y
 
 # Copy application

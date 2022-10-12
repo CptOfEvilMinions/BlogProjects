@@ -3,7 +3,7 @@ services:
   redis:
     image: redis:4.0
     container_name: kolide-redis
-    networks: 
+    networks:
       - kolide-backend
     volumes:
       - kolide-redis:/data
@@ -15,14 +15,14 @@ services:
       MYSQL_DATABASE: kolide
       MYSQL_USER: kolide
       MYSQL_PASSWORD: kolide
-    networks: 
+    networks:
       - kolide-backend
     volumes:
       - kolide-mysql:/var/lib/mysql
   kolide:
     image: kolide
     container_name: kolide-app
-    networks: 
+    networks:
       - kolide-backend
     volumes:
       - kolide-osquery-logs:/var/log/kolide
@@ -35,7 +35,7 @@ services:
   nginx:
     image: nginx:1.16.0
     container_name: kolide-nginx
-    networks: 
+    networks:
       - default
       - kolide-backend
     ports:

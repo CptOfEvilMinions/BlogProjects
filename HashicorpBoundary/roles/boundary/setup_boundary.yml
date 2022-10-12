@@ -28,10 +28,10 @@
     state: present
 
 - name: Create Boundary user
-  user: 
+  user:
     name: '{{ boundary_user }}'
-    group: '{{ boundary_group }}' 
-    system: yes 
+    group: '{{ boundary_group }}'
+    system: yes
 
 - name: Create Boundary directory
   file:
@@ -43,15 +43,15 @@
     - '/etc/boundary'
     - '/etc/boundary/ssl'
 
-- name: Copy Boundary controller service config 
+- name: Copy Boundary controller service config
   template:
     src: 'conf/ansible/boundary_controller/boundary-controller.service'
     dest: '/etc/systemd/system/boundary-controller.service'
     owner: 'root'
     group: 'root'
     mode: 0644
-  
-- name: Copy Boundary worker service config 
+
+- name: Copy Boundary worker service config
   template:
     src: 'conf/ansible/boundary_worker/boundary-worker.service'
     dest: '/etc/systemd/system/boundary-worker.service'
@@ -159,4 +159,3 @@
   wait_for:
     port: 9202
     delay: 10
-  
