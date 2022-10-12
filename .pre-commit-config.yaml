@@ -5,6 +5,11 @@ repos:
     hooks:
       - id: check-ast
       - id: check-json
+        exclude: |
+          (?x)(
+            splunk-custom-search-command-python/sample_logs/zeek_conn.json|
+            splunk-custom-search-command-python/sample_logs/zeek_files.json|
+          )
       - id: check-shebang-scripts-are-executable
         exclude: |
           (?x)(
