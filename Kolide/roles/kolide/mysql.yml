@@ -14,22 +14,22 @@
   service:
     name: mysql.service
     state: restarted
-    enabled: yes
+    enabled: true
 
 ####################################################################
 # Secure MySQL setup
 ####################################################################
 - name: Delete anonymous MySQL server user
   action: mysql_user user="" host="{{ ansible_hostname }}" state="absent"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Delete anonymous MySQL server user for localhost
   action: mysql_user user="" state="absent"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remove the MySQL test database
   action: mysql_db db=test state=absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Change root user password on first run
   mysql_user: login_user=root
@@ -43,7 +43,7 @@
     - 127.0.0.1
     - ::1
     - localhost
-  ignore_errors: yes
+  ignore_errors: true
 
 
 ####################################################################
@@ -51,7 +51,7 @@
 ####################################################################
 - name: Create Kolide database
   shell: mysql -u {{ mysql_root_user }} --password={{ mysql_root_password }} -e "CREATE DATABASE {{ mysql_kolide_dbname }};"
-  ignore_errors: yes
+  ignore_errors: true
   register: mysql_result
   failed_when: "'database exists' in mysql_result.stdout"
 
@@ -64,14 +64,4 @@
     login_user: '{{ mysql_root_user }}'
     login_password: '{{ mysql_root_password }}'
     host: '{{ mysql_kolide_hosts }}'
-  ignore_errors: yes
-
-####################################################################
-#  Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Finished setting up mysql - {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+  ignore_errors: true

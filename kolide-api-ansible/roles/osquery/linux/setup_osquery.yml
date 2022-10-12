@@ -52,4 +52,4 @@
   service:
     name: 'osqueryd'
     state: restarted
-    enabled: yes
+    enabled: true

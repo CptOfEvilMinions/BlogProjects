@@ -3,14 +3,14 @@
 ################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
-    update_cache: yes
-    force_apt_get: True
+    update_cache: true
+    force_apt_get: true
 
 - name: Upgrade all packages to the latest version
   apt:
     name: "*"
     state: latest
-    force_apt_get: True
+    force_apt_get: true
 
 - name: Disable kernel updates
   shell: 'apt-mark hold linux-image-generic linux-headers-generic'
@@ -41,16 +41,6 @@
 ####################################################################
 - name: Install things
   apt:
-    name: ['apt-transport-https','openjdk-8-jre-headless','uuid-runtime','pwgen']
+    name: ['apt-transport-https', 'openjdk-8-jre-headless', 'uuid-runtime', 'pwgen']
     state: latest
-    force_apt_get: True
-
-####################################################################
-#  Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Init setup - {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+    force_apt_get: true

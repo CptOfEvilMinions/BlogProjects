@@ -20,7 +20,7 @@
     dest: '{{ caldera_dir }}'
 - file:
     path: '{{ caldera_dir }}'
-    recurse: yes
+    recurse: true
     state: directory
     owner: caldera
     group: caldera
@@ -48,9 +48,9 @@
   get_url:
     url: https://github.com/mitre/caldera-crater/releases/download/v0.1.0/CraterMainWin8up.exe
     dest: '{{ caldera_dir }}/dep/crater/crater/CraterMain.exe'
-    validate_certs: no
+    validate_certs: false
 
-#- name: Copy Caldera settings.yaml
+# - name: Copy Caldera settings.yaml
 #  template:
 #    src: conf/caldera/settings.yaml.default
 #    dest: '{{ caldera_dir }}/caldera/conf/settings.yaml.default'
@@ -64,4 +64,4 @@
   service:
     name: caldera
     state: restarted
-    enabled: yes
+    enabled: true

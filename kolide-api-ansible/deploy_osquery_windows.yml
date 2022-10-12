@@ -3,7 +3,7 @@
     # Request variables for playbook
     - import_tasks: 'roles/osquery/init.yml'
       delegate_to: localhost
-      run_once: True
+      run_once: true
 
     # Install/Setup Osquery on linux
     - import_tasks: 'roles/osquery/windows/setup_osquery.yml'

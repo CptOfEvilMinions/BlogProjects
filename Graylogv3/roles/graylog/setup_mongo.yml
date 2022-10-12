@@ -13,7 +13,7 @@
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
-    update_cache: yes
+    update_cache: true
 
 - name: Install MongoDB
   apt:
@@ -24,14 +24,4 @@
   service:
     name: 'mongod'
     state: restarted
-    enabled: yes
-
-####################################################################
-# Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: "{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Set up Mongo - {{ ansible_nodename }}"
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+    enabled: true

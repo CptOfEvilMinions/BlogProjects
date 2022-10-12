@@ -1,9 +1,9 @@
 - hosts: caldera
-  become: yes
+  become: true
   become_user: root
   tasks:
     - import_tasks: roles/init.yml
     - import_tasks: roles/caldera/mongo.yml
     - import_tasks: roles/caldera/caldera.yml
-    #- import_tasks: roles/caldera/nginx.yml
+    # - import_tasks: roles/caldera/nginx.yml
     - import_tasks: roles/caldera/firewall.yml

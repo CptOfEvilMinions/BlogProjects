@@ -36,7 +36,7 @@
   with_items:
     - 'make'
     - 'insmod ./pf_ring.ko'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Make PF_RING/userland
   shell: '{{ item }}'
@@ -84,14 +84,4 @@
   lineinfile:
     path: '/etc/modules'
     line: 'pf_ring'
-    create: yes
-
-####################################################################
-#  Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Compiled PF_RING - {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+    create: true

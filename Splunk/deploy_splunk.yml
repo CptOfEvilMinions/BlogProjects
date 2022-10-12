@@ -1,5 +1,5 @@
 - hosts: splunk
-  become: yes
+  become: true
   become_user: root
   tasks:
     - import_tasks: roles/splunk/setup_splunk.yml

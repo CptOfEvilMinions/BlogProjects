@@ -1,7 +1,7 @@
 #########################################################
 # Get Kolide public certificate
 #########################################################
-- name:  Get Kolide public certificate
+- name: Get Kolide public certificate
   community.crypto.get_certificate:
     host: "{{ kolide_hostname }}"
     port: "{{ kolide_port }}"
@@ -18,8 +18,8 @@
   uri:
     url: "https://{{ kolide_hostname }}:{{ kolide_port }}/api/v1/kolide/spec/enroll_secret"
     method: GET
-    return_content: yes
-    validate_certs: no
+    return_content: true
+    validate_certs: false
     headers:
       Authorization: "Bearer {{ lookup('env','KOLIDE_TOKEN') }}"
   register: enroll_secret

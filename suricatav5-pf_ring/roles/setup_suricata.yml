@@ -8,7 +8,33 @@
 
 - name: Install deps
   apt:
-    name: ['libpcre3','libpcre3-dbg','libpcre3-dev','build-essential','libpcap-dev','libnet1-dev','libyaml-0-2','libyaml-dev','pkg-config','zlib1g','zlib1g-dev','libcap-ng-dev','libcap-ng0','make','libmagic-dev','libjansson-dev','libnss3-dev','libgeoip-dev','liblua5.1-dev','libhiredis-dev','libevent-dev','python-yaml','rustc','cargo','liblz4-dev']
+    name: [
+      'libpcre3',
+      'libpcre3-dbg',
+      'libpcre3-dev',
+      'build-essential',
+      'libpcap-dev',
+      'libnet1-dev',
+      'libyaml-0-2',
+      'libyaml-dev',
+      'pkg-config',
+      'zlib1g',
+      'zlib1g-dev',
+      'libcap-ng-dev',
+      'libcap-ng0',
+      'make',
+      'libmagic-dev',
+      'libjansson-dev',
+      'libnss3-dev',
+      'libgeoip-dev',
+      'liblua5.1-dev',
+      'libhiredis-dev',
+      'libevent-dev',
+      'python-yaml',
+      'rustc',
+      'cargo',
+      'liblz4-dev',
+    ]
     state: latest
 
 - name: Stat Suricata
@@ -34,7 +60,7 @@
   unarchive:
     src: /tmp/suricata-{{ suricata_version }}.tar.gz
     dest: '{{ suricata_dir }}'
-    remote_src: yes
+    remote_src: true
     extra_opts: [--strip-components=1]
   when: not suricata_dir_stat.stat.exists
 
@@ -83,8 +109,8 @@
   copy:
     src: '/etc/suricata/suricata.yaml'
     dest: /etc/suricata/suricata.yaml.bak'
-    remote_src: yes
-    backup: yes
+    remote_src: true
+    backup: true
     mode: 0400
     owner: root
     group: root
@@ -122,7 +148,7 @@
     state: directory
     owner: '{{ suricata_username }}'
     group: 'root'
-    recurse: yes
+    recurse: true
 
 - name: Copy /etc/default/suricata
   template:
@@ -150,7 +176,7 @@
   service:
     name: 'suricata'
     state: restarted
-    enabled: yes
+    enabled: true
 
 ##################################################################################
 # Install Suricata rules manager
@@ -215,4 +241,4 @@
   service:
     name: 'suricata'
     state: restarted
-    enabled: yes
+    enabled: true

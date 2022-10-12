@@ -63,4 +63,4 @@
   service:
     name: grr-server
     state: restarted
-    enabled: yes
+    enabled: true

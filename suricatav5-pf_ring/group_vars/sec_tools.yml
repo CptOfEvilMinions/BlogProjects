@@ -10,7 +10,14 @@ suricata_configure_sysconfdir: '/etc'
 suricata_configure_localstatedir: '/var'
 suricata_configure_libpfring_includes: '/usr/local/include'
 suricata_configure_libpfring_libraries: '/usr/local/lib'
-suricata_configure: 'LIBS="-lrt" ./configure --prefix={{ suricata_configure_prefix }} --sysconfdir={{ suricata_configure_sysconfdir }} --localstatedir={{ suricata_configure_localstatedir }} --enable-pfring --with-libpfring-includes={{ suricata_configure_libpfring_includes }} --with-libpfring-libraries={{ suricata_configure_libpfring_libraries }}'
+suricata_configure: >
+  LIBS="-lrt" ./configure
+  --prefix={{ suricata_configure_prefix }}
+  --sysconfdir={{ suricata_configure_sysconfdir }}
+  --localstatedir={{ suricata_configure_localstatedir }}
+  --enable-pfring
+  --with-libpfring-includes={{ suricata_configure_libpfring_includes }}
+  --with-libpfring-libraries={{ suricata_configure_libpfring_libraries }}
 
 suricata_rules_dir: '/etc/suricata/rules'
 
