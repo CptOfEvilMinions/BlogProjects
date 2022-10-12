@@ -36,7 +36,7 @@
   unarchive:
     src: https://dl.kolide.co/bin/fleet_latest.zip
     dest: /usr/local/bin
-    remote_src: yes
+    remote_src: true
 
 - name: Intialize Kolide database
   shell: /usr/local/bin/linux/fleet_linux_amd64 prepare db --config /etc/kolide/kolide.yml
@@ -55,7 +55,7 @@
   service:
     name: kolide
     state: restarted
-    enabled: yes
+    enabled: true
 
 ####################################################################
 # Install/Setup Nginx
@@ -84,7 +84,7 @@
 - name: Copy nginx.conf
   template:
     src: conf/nginx/nginx.conf
-    dest:  /etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
 
 - name: Copy nginx_kolide.conf
   template:
@@ -97,21 +97,15 @@
   register: stat_dhparam
 - shell: openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
   when: stat_dhparam.stat.exists == False
-- shell: openssl req -new -nodes -x509 -days 3650 -subj "/C={{ cert_country }}/ST={{ cert_state }}/L={{ cert_local }}/O={{ cert_org }}/CN={{ fleet_hostname }}.{{ base_domain }}" -keyout /etc/nginx/ssl/kolide.key -out /etc/nginx/ssl/kolide.crt
+- shell: |
+    openssl req -new -nodes -x509 -days 3650 \
+    -subj "/C={{ cert_country }}/ST={{ cert_state }}/L={{ cert_local }}/O={{ cert_org }}/CN={{ fleet_hostname }}.{{ base_domain }}" \
+    -keyout /etc/nginx/ssl/kolide.key \
+    -out /etc/nginx/ssl/kolide.crt
   when: stat_dhparam.stat.exists == False
 
 - name: Start Nginx service
   service:
     name: nginx
     state: restarted
-    enabled: yes
-
-####################################################################
-# Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Finished setting up Kolide Fleet manager - {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+    enabled: true

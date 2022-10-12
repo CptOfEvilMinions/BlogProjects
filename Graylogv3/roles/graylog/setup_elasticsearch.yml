@@ -13,7 +13,7 @@
 
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
-    update_cache: yes
+    update_cache: true
 
 - name: Install Elasticsearch
   apt:
@@ -30,20 +30,10 @@
   lineinfile:
     path: '/etc/elasticsearch/elasticsearch.yml'
     line: "action.auto_create_index: {{ es_action_auto_create_index }}"
-    create: yes
+    create: true
 
 - name: Start Elasticsearch service
   service:
     name: 'elasticsearch'
     state: restarted
-    enabled: yes
-
-####################################################################
-# Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: "{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Set up Elasticsearch - {{ ansible_nodename }}"
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+    enabled: true

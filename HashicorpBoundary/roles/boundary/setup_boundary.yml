@@ -31,7 +31,7 @@
   user:
     name: '{{ boundary_user }}'
     group: '{{ boundary_group }}'
-    system: yes
+    system: true
 
 - name: Create Boundary directory
   file:
@@ -65,7 +65,7 @@
 - name: CURL Vault Root CA
   get_url:
     url: '{{ vault_addr }}/v1/pki/ca/pem'
-    validate_certs: no
+    validate_certs: false
     dest: "/etc/ssl/certs/{{ base_domain | replace('.','-') }}-root-ca.crt"
     owner: 'root'
     group: 'root'
@@ -142,7 +142,7 @@
   service:
     name: 'boundary-controller'
     state: restarted
-    enabled: yes
+    enabled: true
 
 - name: Wait for Boundary controller to start
   wait_for:
@@ -153,7 +153,7 @@
   service:
     name: 'boundary-worker'
     state: restarted
-    enabled: yes
+    enabled: true
 
 - name: Wait for Boundary worker to start
   wait_for:

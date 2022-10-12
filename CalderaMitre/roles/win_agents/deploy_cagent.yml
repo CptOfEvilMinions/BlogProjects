@@ -10,7 +10,7 @@
   win_get_url:
     url: https://{{ caldera_hostname }}.{{ base_domain }}:{{ item }}/conf.yml
     dest: C:\Program Files\cagent\conf.yml
-    validate_certs: no
+    validate_certs: false
   with_items:
     - 8888
 #    - 443

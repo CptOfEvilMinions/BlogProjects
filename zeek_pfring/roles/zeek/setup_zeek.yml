@@ -29,7 +29,7 @@
 - name: Download Zeek source code
   git:
     repo: https://github.com/zeek/zeek
-    recursive: yes
+    recursive: true
     dest: '/tmp/zeek'
   when: zeek_compile.stat.exists == False
 
@@ -62,7 +62,7 @@
   unarchive:
     src: '{{ zeek_geoip_db_url }}'
     dest: '/usr/share/GeoIP/'
-    remote_src: yes
+    remote_src: true
     extra_opts: [--strip-components=1]
   when: geoip_db.stat.exists == False and zeek_geoip == True
 
@@ -113,7 +113,7 @@
     path: '{{ zeek_base }}'
     owner: '{{ zeek_user }}'
     group: '{{ zeek_user }}'
-    recurse: yes
+    recurse: true
 
 - name: Add Zeek to system-wide $PATH
   copy:
@@ -205,19 +205,9 @@
 ####################################################################
 - name: Run Bro deploy
   shell: '{{ zeek_base }}/bin/broctl {{ item }}'
-  become: yes
+  become: true
   become_user: '{{ zeek_user }}'
   with_items:
     - 'install'
     - 'deploy'
     - 'status'
-
-####################################################################
-#  Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Finished setting up Zeek on {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token != None

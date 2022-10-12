@@ -1,4 +1,4 @@
 - hosts: win_agents
   tasks:
-    #- import_tasks: 'roles/win_client/setup_osquery.yml'
+    # - import_tasks: 'roles/win_client/setup_osquery.yml'
     - import_tasks: 'roles/win_client/setup_filebeat.yml'

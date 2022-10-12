@@ -3,13 +3,12 @@
 ####################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
-    update_cache: yes
+    update_cache: true
 
 
 ####################################################################
 # Install/Setup Splunk
 ####################################################################
-
 
 
 ####################################################################
@@ -20,13 +19,3 @@
 ####################################################################
 # Setup UFW
 ####################################################################
-
-####################################################################
-# Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Setup Splunk - {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token != None

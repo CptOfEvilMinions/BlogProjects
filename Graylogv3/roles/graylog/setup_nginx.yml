@@ -12,7 +12,7 @@
   copy:
     src: '/etc/nginx/nginx.conf'
     dest: '/etc/nginx/nginx.conf.bak'
-    remote_src: yes
+    remote_src: true
     owner: 'root'
     group: 'root'
     mode: '0400'
@@ -47,7 +47,7 @@
     size: 4096
 
 - name: "generate ssl private key file"
-  become: yes
+  become: true
   openssl_privatekey:
     path: "/etc/nginx/ssl/{{ graylog_hostname }}.{{ base_domain }}.key"
 
@@ -64,7 +64,7 @@
     CN: "{{ graylog_hostname }}.{{ base_domain }}"
 
 - name: "generate ssl certificate"
-  become: yes
+  become: true
   openssl_certificate:
     path: "/etc/nginx/ssl/{{ graylog_hostname }}.{{ base_domain }}.crt"
     privatekey_path: "/etc/nginx/ssl/{{ graylog_hostname }}.{{ base_domain }}.key"
@@ -75,14 +75,4 @@
   service:
     name: nginx
     state: restarted
-    enabled: yes
-
-####################################################################
-# Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: "{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Set up NGINX - {{ ansible_nodename }}"
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined
+    enabled: true

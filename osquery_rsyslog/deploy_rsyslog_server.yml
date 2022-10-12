@@ -1,6 +1,5 @@
-
 - hosts: 'rsyslog-server'
-  become: yes
+  become: true
   become_user: root
   tasks:
     - include_vars: 'group_vars/logging.yml'

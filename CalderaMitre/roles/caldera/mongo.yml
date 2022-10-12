@@ -17,4 +17,4 @@
   service:
     name: mongodb
     state: restarted
-    enabled: yes
+    enabled: true

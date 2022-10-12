@@ -17,7 +17,7 @@
 #   win_copy:
 #     src: '%USERPROFILE%\AppData\Local\filebeat\filebeat-{{ filebeat_version }}-windows-x86_64\'
 #     dest: 'C:\Program Files\Filebeat'
-#     remote_src: True
+#     remote_src: true
 
 - name: Install Filebeat win_service
   win_shell: '.\install-service-filebeat.ps1'
@@ -34,14 +34,3 @@
     name: filebeat
     state: restarted
     start_mode: auto
-
-
-####################################################################
-# Slack notification
-####################################################################
-- name: Send slack notification when done
-  slack:
-    token: "{{ slack_token }}"
-    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Finished setting OSQuery agent on {{ ansible_nodename }}'
-    channel: "{{ slack_channel }}"
-  when: slack_token is undefined

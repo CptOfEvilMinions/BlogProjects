@@ -26,7 +26,7 @@
 - name: Create database for Boundary
   postgresql_db:
     name: '{{ postgres_dbname }}'
-  become: yes
+  become: true
   become_method: sudo
   become_user: postgres
 
@@ -35,7 +35,7 @@
     name: '{{ postgres_username }}'
     password: '{{ postgres_password }}'
     encrypted: 'yes'
-  become: yes
+  become: true
   become_method: sudo
   become_user: postgres
 
@@ -45,7 +45,7 @@
     role: '{{ postgres_username }}'
     objs: ALL_IN_SCHEMA
     privs: ALL
-  become: yes
+  become: true
   become_method: sudo
   become_user: postgres
 
@@ -53,12 +53,12 @@
   postgresql_ext:
     name: pgcrypto
     db: '{{ postgres_dbname }}'
-  become: yes
+  become: true
   become_method: sudo
   become_user: postgres
 
 - name: Enable and restart Postgres
   service:
     name: 'postgresql'
-    enabled: yes
+    enabled: true
     state: restarted

@@ -27,7 +27,8 @@ repos:
             docker-compose.yml|
             kafka-enricher/docker-compose-kafka.yml|
             suricatav5-pf_ring/conf/suricata/suricata.yaml|
-            kolide-docker/conf/osquery/osquery.yml
+            kolide-docker/conf/osquery/osquery.yml|
+            Kolide/roles/agents/deploy_osquery_centos.yml
           )
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -71,27 +72,10 @@ repos:
   #   hooks:
   #     - id: golangci-lint
 
-
-  # - repo: https://github.com/ansible/ansible-lint
-  #   rev: v6.8.1
-  #   hooks:
-  #     - id: ansible-lint
-  #       exclude: |
-  #         (?x)(
-  #           ElasticStackv7/conf/filebeat/filebeat.yml|
-  #           Kolide/conf/filebeat/filebeat.yml|
-  #           Kolide/conf/kolide/kolide.yml|
-  #           ksql-osquery-zeek-correlator/conf/windows-filebeat/filebeat.yml|
-  #           ksql-osquery-zeek-suricata-correlator/conf/windows-filebeat/filebeat.yml|
-  #           suricatav5-pf_ring/conf/suricata/suricata.yaml
-  #         )
-  #       files: |
-  #         (?x)(
-  #           roles\/.*\/\w+\.(yaml|yml)|
-  #           deploy_\w+\.(yaml|yml)|
-  #           group_vars\/+w+\.(yaml|yml)|
-  #           hosts.ini
-  #         )
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v6.8.1
+    hooks:
+      - id: ansible-lint
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.76.0
