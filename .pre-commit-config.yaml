@@ -42,20 +42,24 @@ repos:
       - id: check-docstring-first
       - id: requirements-txt-fixer
 
+
   - repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
       - id: black
+
 
   - repo: https://github.com/PyCQA/flake8
     rev: 5.0.4
     hooks:
       - id: flake8
 
+
   - repo: https://github.com/PyCQA/pylint
     rev: v2.15.4
     hooks:
       - id: pylint
+
 
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.9.0
@@ -65,16 +69,12 @@ repos:
       # A quick check for the deprecated `.warn()` method of python loggers
       - id: python-no-log-warn
 
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: v1.1.2
-    hooks:
-      - id: dockerfile_lint
-        args: [--json, --dockerfile]
 
   - repo: https://github.com/ansible/ansible-lint
     rev: v6.8.1
     hooks:
       - id: ansible-lint
+
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.76.0
