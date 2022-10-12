@@ -33,7 +33,8 @@ repos:
             kafka-enricher/docker-compose-kafka.yml|
             suricatav5-pf_ring/conf/suricata/suricata.yaml|
             kolide-docker/conf/osquery/osquery.yml|
-            Kolide/roles/agents/deploy_osquery_centos.yml
+            Kolide/roles/agents/deploy_osquery_centos.yml|
+            Kolide/conf/filebeat/filebeat.yml|
           )
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -63,8 +64,6 @@ repos:
       - id: python-no-eval
       # A quick check for the deprecated `.warn()` method of python loggers
       - id: python-no-log-warn
-      # Enforce that python3.6+ type annotations are used instead of type comments
-      - id: python-use-type-annotations
 
   # - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
   #   rev: v1.1.2
