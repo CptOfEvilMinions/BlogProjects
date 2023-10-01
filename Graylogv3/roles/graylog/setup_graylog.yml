@@ -24,7 +24,7 @@
   register: pass_contents
 
 - name: Set root_password_sha2
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/graylog/server/server.conf
     regexp: '^root_password_sha2 ='
     line: "root_password_sha2 = {{ pass_contents.stdout }}"

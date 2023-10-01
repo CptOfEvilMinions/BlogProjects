@@ -25,7 +25,7 @@
 # Compile PF_RING
 ################################################################
 - name: Git pull PF_RINT
-  git:
+  ansible.builtin.git:
     repo: '{{ pf_ring_url }}'
     dest: '{{ pf_ring_dir }}'
 
@@ -81,7 +81,7 @@
 # Add pf_ring on boot
 ################################################################
 - name: Add pf_ring on boot
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '/etc/modules'
     line: 'pf_ring'
     create: true

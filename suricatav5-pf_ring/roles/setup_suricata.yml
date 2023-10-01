@@ -38,7 +38,7 @@
     state: latest
 
 - name: Stat Suricata
-  stat:
+  ansible.builtin.stat:
     path: '{{ suricata_dir }}'
   register: suricata_dir_stat
 
@@ -69,7 +69,7 @@
 # Compile Suricata
 ##################################################################################
 - name: Stat Suricata
-  stat:
+  ansible.builtin.stat:
     path: '{{ suricata_configure_sysconfdir }}/suricata'
   register: suricata_conf_dir_stat
 
@@ -101,7 +101,7 @@
 # Configure Suricata
 #################################################################################
 - name: Stat Suricata
-  stat:
+  ansible.builtin.stat:
     path: '{{ suricata_configure_sysconfdir }}/suricata'
   register: suricata_conf_dir_stat
 
@@ -210,7 +210,7 @@
     group: root
 
 - name: Stat Suricata rules directory
-  stat:
+  ansible.builtin.stat:
     path: '/var/lib/suricata/rules'
   register: suricata_rules_dir
 

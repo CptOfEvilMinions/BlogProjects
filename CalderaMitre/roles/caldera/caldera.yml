@@ -15,7 +15,7 @@
     shell: /usr/sbin/nologin
 
 - name: Download caldera
-  git:
+  ansible.builtin.git:
     repo: 'https://github.com/mitre/caldera.git'
     dest: '{{ caldera_dir }}'
 - file:
@@ -26,7 +26,7 @@
     group: caldera
 
 - name: SED aiohttp==2.3.2 to aiohttp==2.3.8
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ caldera_dir }}/caldera/requirements.txt'
     regexp: '^aiohttp==2.3.2'
     line: 'aiohttp==2.3.8'

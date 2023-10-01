@@ -22,12 +22,12 @@
 # Download Zeek source code
 ####################################################################
 - name: Stat Zeek
-  stat:
+  ansible.builtin.stat:
     path: '{{ zeek_base }}/bin/bro'
   register: zeek_compile
 
 - name: Download Zeek source code
-  git:
+  ansible.builtin.git:
     repo: https://github.com/zeek/zeek
     recursive: true
     dest: '/tmp/zeek'
@@ -45,7 +45,7 @@
 # https://docs.zeek.org/en/stable/frameworks/geoip.html
 ####################################################################
 - name: Stat GeoIP database
-  stat:
+  ansible.builtin.stat:
     path: '/usr/share/GeoIP/GeoLite2-City.mmdb'
   register: geoip_db
   when: zeek_geoip == True
@@ -134,13 +134,13 @@
     - 'node.cfg'
 
 - name: Replace Zeek e-mail
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/etc/broctl.cfg'
     regexp: '^MailTo ='
     line: 'MailTo = {{ zeek_mail_to }}'
 
 - name: Enable Bro logging in JSON format
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '{{ item }}'
   with_items:
@@ -159,7 +159,7 @@
 # Zeek scripts
 ####################################################################
 - name: Enable Zeek file extraction
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '{{ item }}'
   with_items:
@@ -168,7 +168,7 @@
   when: zeek_file_extraction == True
 
 - name: Enable Zeek stats
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '{{ item }}'
   with_items:
@@ -187,13 +187,13 @@
   when: zeek_custom_scripts == True
 
 - name: Add commnet for custom scripts
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '# Zeek custom scripts'
   when: zeek_custom_scripts == True
 
 - name: Enable Zeek file extraction
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '@load scripts/{{ item | basename }}'
   with_fileglob:

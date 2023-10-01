@@ -15,7 +15,7 @@
 # Set hostname
 ####################################################################
 - name: add hostname to /etc/hosts
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/hosts
     regexp: '^127\.0\.0\.1[ \t]+localhost'
     line: '127.0.0.1 localhost {{ caldera_hostname }} {{ caldera_hostname }}.{{ base_domain }}'
