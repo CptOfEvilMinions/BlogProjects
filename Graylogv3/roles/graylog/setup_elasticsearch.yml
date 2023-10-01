@@ -21,13 +21,13 @@
     state: latest
 
 - name: Replace cluster.name
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '/etc/elasticsearch/elasticsearch.yml'
     regexp: '^#cluster.name:'
     line: 'cluster.name: {{ es_cluster_name }}'
 
 - name: Add ES option
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '/etc/elasticsearch/elasticsearch.yml'
     line: "action.auto_create_index: {{ es_action_auto_create_index }}"
     create: true

@@ -53,7 +53,7 @@
 # Download pf_ring
 ##################################################################################
 - name: Stat pf_ring
-  stat:
+  ansible.builtin.stat:
     path: '{{ pfring_dir }}'
   register: pfring_tar_stat
 
@@ -115,7 +115,7 @@
 # Compile and install Libpfring
 ##################################################################################
 - name: Stat Libpfring
-  stat:
+  ansible.builtin.stat:
     path: /usr/local/lib/libpfring.so
   register: libpfring_stat
 
@@ -140,7 +140,7 @@
 # Compile and install Libpcap
 ##################################################################################
 - name: Stat Libpcap
-  stat:
+  ansible.builtin.stat:
     path: /usr/local/lib/libpcap.so
   register: libpcap_stat
 
@@ -166,7 +166,7 @@
 # PF_RING service
 ##################################################################################
 - name: Stat pf_ringctl
-  stat:
+  ansible.builtin.stat:
     path: /usr/local/bin/pf_ringctl
   register: pf_ringctl_stat
 
@@ -180,7 +180,7 @@
   when: not pf_ringctl_stat.stat.exists
 
 - name: Stat pf_ring systemed
-  stat:
+  ansible.builtin.stat:
     path: /etc/systemd/system/pf_ring.service
   register: pf_ring_systemed_stat
 

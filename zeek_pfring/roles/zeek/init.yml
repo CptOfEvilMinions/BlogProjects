@@ -30,7 +30,7 @@
     name: "{{ zeek_hostname }}"
 
 - name: add myself to /etc/hosts
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/hosts
     regexp: '^127\.0\.0\.1[ \t]+localhost'
     line: '127.0.0.1 localhost {{ zeek_hostname }}'

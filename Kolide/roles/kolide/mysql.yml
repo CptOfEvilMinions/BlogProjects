@@ -32,12 +32,13 @@
   ignore_errors: true
 
 - name: Change root user password on first run
-  mysql_user: login_user=root
-              login_password=''
-              name={{ mysql_root_user }}
-              password={{ mysql_root_password }}
-              priv=*.*:ALL,GRANT
-              host={{ item }}
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: ''
+    name: "{{ mysql_root_user }}"
+    password: "{{ mysql_root_password }}"
+    priv: "*.*:ALL,GRANT"
+    host: "{{ item }}"
   with_items:
     - "{{ ansible_hostname }}"
     - 127.0.0.1
@@ -50,7 +51,7 @@
 #  Setup Kolide database
 ####################################################################
 - name: Create Kolide database
-  shell: mysql -u {{ mysql_root_user }} --password={{ mysql_root_password }} -e "CREATE DATABASE {{ mysql_kolide_dbname }};"
+  ansible.builtin.shell: mysql -u {{ mysql_root_user }} --password={{ mysql_root_password }} -e "CREATE DATABASE {{ mysql_kolide_dbname }};"
   ignore_errors: true
   register: mysql_result
   failed_when: "'database exists' in mysql_result.stdout"

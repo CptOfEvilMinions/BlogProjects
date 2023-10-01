@@ -45,7 +45,7 @@
 # Setup Logrotate
 ####################################################################
 - name: Modify logrotate rsyslog config
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/logrotate.d/rsyslog
     regexp: '^/var/log/syslog'
     line: '/var/log/rsyslog'
