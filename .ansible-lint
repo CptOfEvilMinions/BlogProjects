@@ -15,6 +15,7 @@ exclude_paths:
   - "**/docker-compose-swarm.yml"
   - kolide-docker/docker-compose-stack.yml
   - "**/docker-compose-*.yml"
+  - graveyard/
 
 # parseable: true
 # quiet: true
