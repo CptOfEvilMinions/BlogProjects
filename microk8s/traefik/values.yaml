@@ -1,0 +1,31 @@
+---
+deployment:
+  replicas: 3
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    ingressClass: traefik-external
+    allowExternalNameServices: true
+  kubernetesIngress:
+    enabled: true
+
+service:
+  enabled: true
+  type: LoadBalancer
+
+# The following lines are needed if you have an error like: error while building entryPoint web: error preparing server: error opening listener: listen tcp :80: bind: permission denied
+# It just means that Traefik is unable to listen to connections on the host because of a lack of permissions.
+# Hence the need for aditionnal permissions.
+securityContext:
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+  readOnlyRootFilesystem: true
+  runAsGroup: 0
+  runAsNonRoot: false
+  runAsUser: 0
