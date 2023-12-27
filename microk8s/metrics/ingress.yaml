@@ -1,0 +1,66 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-hackinglab-kubes-cert
+  namespace: metrics
+spec:
+  secretName: grafana-hackinglab-kubes-cert
+  privateKey:
+    rotationPolicy: Always
+    algorithm: RSA
+    encoding: PKCS1
+    size: 4096
+  duration: 2190h # 3 months
+  renewBefore: 168h #1 week
+  subject:
+    organizations:
+      - hackinglab
+  isCA: false
+  commonName: grafana.hackinglab.kubes
+  dnsNames:
+    - grafana.hackinglab.kubes
+    - prometheus.hackinglab.kubes
+  issuerRef:
+    name: hackinglab-kubes-issuer
+    kind: ClusterIssuer
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+  namespace: metrics
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    secretName: grafana-hackinglab-kubes-cert
+  routes:
+    - match: Host(`grafana.hackinglab.kubes`)
+      kind: Rule
+      services:
+        - name: prometheus-grafana
+          port: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus
+  namespace: metrics
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    secretName: grafana-hackinglab-kubes-cert
+  routes:
+    - match: Host(`prometheus.hackinglab.kubes`)
+      kind: Rule
+      services:
+        - name: prometheus-kube-prometheus-prometheus
+          port: 9090

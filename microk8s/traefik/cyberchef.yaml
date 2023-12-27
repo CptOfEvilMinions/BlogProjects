@@ -1,0 +1,82 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cyberchef-hackinglab-kubes-cert
+  namespace: cyberchef
+spec:
+  secretName: cyberchef-hackinglab-kubes-cert
+  privateKey:
+    rotationPolicy: Always
+    algorithm: RSA
+    encoding: PKCS1
+    size: 4096
+  duration: 2190h # 3 months
+  renewBefore: 168h #1 week
+  subject:
+    organizations:
+      - hackinglab
+  isCA: false
+  commonName: cyberchef.hackinglab.kubes
+  dnsNames:
+    - cyberchef.hackinglab.kubes
+  issuerRef:
+    name: hackinglab-kubes-issuer
+    kind: ClusterIssuer
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: cyberchef
+  namespace: cyberchef
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    secretName: cyberchef-hackinglab-kubes-cert
+  routes:
+    - match: Host(`cyberchef.hackinglab.kubes`)
+      kind: Rule
+      services:
+        - name: cyberchef
+          port: 8000
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cyberchef
+  namespace: cyberchef
+  labels:
+    app: cyberchef
+spec:
+  containers:
+    - name: cyberchef
+      image: mpepping/cyberchef:latest
+      ports:
+        - containerPort: 8000
+      resources:
+        limits:
+          memory: 100Mi
+          cpu: "1"
+        requests:
+          memory: 10Mi
+          cpu: "0.2"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cyberchef
+  namespace: cyberchef
+spec:
+  ports:
+    - port: 8000
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: cyberchef
+  type: ClusterIP
