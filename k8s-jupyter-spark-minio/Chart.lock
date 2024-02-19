@@ -1,0 +1,12 @@
+dependencies:
+- name: spark
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.1.5
+- name: jupyterhub
+  repository: https://jupyterhub.github.io/helm-chart/
+  version: 3.1.0
+- name: minio
+  repository: https://charts.min.io
+  version: 5.0.14
+digest: sha256:ffb934bbe76847c7ada732fa8500be010a8b70d5686498d9deb9e1e3cd0ca2de
+generated: "2023-12-18T21:44:21.424795-06:00"
