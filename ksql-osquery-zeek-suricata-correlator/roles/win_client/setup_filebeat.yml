@@ -20,17 +20,17 @@
 #     remote_src: true
 
 - name: Install Filebeat win_service
-  win_shell: '.\install-service-filebeat.ps1'
+  ansible.windows.win_shell: '.\install-service-filebeat.ps1'
   args:
     chdir: 'C:\Program Files\Filebeat'
 
 - name: Copy filebeat.yml
-  win_template:
+  ansible.windows.win_template:
     src: conf/windows-filebeat/filebeat.yml
     dest: 'C:\Program Files\Filebeat\filebeat.yml'
 
 - name: Restart Filebeat
-  win_service:
+  ansible.windows.win_service:
     name: filebeat
     state: restarted
     start_mode: auto

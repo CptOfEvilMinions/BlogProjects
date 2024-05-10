@@ -2,27 +2,27 @@
 #  Install/Setup OSQUery
 ####################################################################
 - name: Add OSQuery repo key for Ubuntu
-  apt_key:
+  ansible.builtin.apt_key:
     keyserver: keyserver.ubuntu.com
     id: 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Add OSquery repo for Ubuntu
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb [arch=amd64] https://pkg.osquery.io/deb deb main
     state: present
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Install OSQuery
-  package:
+  ansible.builtin.package:
     name: osquery
     state: installed
 
 - name: Get cert for Kolide
-  shell: python3 -c "import ssl; print (ssl.get_server_certificate(('{{ fleet_hostname }}.{{ base_domain }}', 443)))" | sudo tee /etc/osquery/certificate.crt
+  ansible.builtin.shell: python3 -c "import ssl; print (ssl.get_server_certificate(('{{ fleet_hostname }}.{{ base_domain }}', 443)))" | sudo tee /etc/osquery/certificate.crt
 
 - name: Copy OSQuery flags file
-  template:
+  ansible.builtin.template:
     src: conf/agents/osquery.flags
     dest: /etc/osquery/osquery.flags
     owner: root
@@ -30,7 +30,7 @@
     mode: '0600'
 
 - name: Copy OSQuery secret
-  template:
+  ansible.builtin.template:
     src: conf/agents/osquery.key
     dest: /etc/osquery/osquery.key
     owner: root
@@ -38,7 +38,7 @@
     mode: '0600'
 
 - name: Enable OSQuery service
-  service:
+  ansible.builtin.service:
     name: osqueryd
     state: restarted
     enabled: true

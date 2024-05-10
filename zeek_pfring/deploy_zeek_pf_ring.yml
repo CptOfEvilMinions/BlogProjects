@@ -2,6 +2,6 @@
   become: true
   become_user: root
   tasks:
-    - import_tasks: 'roles/zeek/init.yml'
-    - import_tasks: 'roles/zeek/setup_pf_ring.yml'
-    - import_tasks: 'roles/zeek/setup_zeek.yml'
+    - ansible.builtin.import_tasks: 'roles/zeek/init.yml'
+    - ansible.builtin.import_tasks: 'roles/zeek/setup_pf_ring.yml'
+    - ansible.builtin.import_tasks: 'roles/zeek/setup_zeek.yml'

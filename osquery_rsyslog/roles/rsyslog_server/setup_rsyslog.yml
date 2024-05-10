@@ -2,7 +2,7 @@
 # Install/Setup Rsyslog
 ####################################################################
 - name: Install Rsyslog
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -10,33 +10,34 @@
     - rsyslog-relp
 
 - name: Copy Rsyslog.conf
-  template:
+  ansible.builtin.template:
     src: 'conf/rsyslog_server/rsyslog.conf'
     dest: /etc/rsyslog.conf
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Copy rsyslog configs
-  template:
+  ansible.builtin.template:
     src: '{{ item }}'
     dest: '/etc/rsyslog.d/{{ item | basename }}'
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
   with_items:
     - 'conf/rsyslog_server/50-default.conf'
     - 'conf/rsyslog_server/60-osquery-to-disk.conf'
 
 - name: Create directory
-  file:
+  ansible.builtin.file:
     path: '/var/log/rsyslog'
     state: directory
     owner: syslog
     group: adm
+    mode: "0755"
 
 - name: Start Rsyslog client
-  service:
+  ansible.builtin.service:
     name: rsyslog
     state: restarted
     enabled: true
@@ -54,15 +55,15 @@
 # Setup UFW
 ####################################################################
 - name: Enable UFW
-  ufw:
+  community.general.ufw:
     state: enabled
 
 - name: Allow SSH to Rsyslog
-  ufw:
+  community.general.ufw:
     rule: allow
     port: 22
 
 - name: Allow all access to Rsyslog
-  ufw:
+  community.general.ufw:
     rule: allow
     port: '{{ rsyslog_port }}'

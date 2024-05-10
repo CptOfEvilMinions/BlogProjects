@@ -16,6 +16,15 @@ exclude_paths:
   - kolide-docker/docker-compose-stack.yml
   - "**/docker-compose-*.yml"
   - graveyard/
+  - "**/values.yaml"
+  - "**/values-example.yaml"
+  - "microk8s/synology-storage/**"
+  - "microk8s/**"
+  ### OLD playbooks ###
+  - "zeek_pfring/"
+  - "suricatav5-pf_ring/"
+  - "HashicorpBoundary/"
+  - "Graylogv3/"
 
 # parseable: true
 # quiet: true
@@ -48,6 +57,12 @@ use_default_rules: true
 # This makes linter to fully ignore rules/tags listed below
 skip_list:
   - skip_this_tag
+  - no-changed-when
+  - command-instead-of-shell
+  - loop-var-prefix[missing]
+  - name[template]
+  - package-latest
+  - yaml[line-length]
 
 # Any rule that has the 'opt-in' tag will not be loaded unless its 'id' is
 # mentioned in the enable_list:

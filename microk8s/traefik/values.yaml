@@ -22,7 +22,7 @@ service:
 # It just means that Traefik is unable to listen to connections on the host because of a lack of permissions.
 # Hence the need for aditionnal permissions.
 securityContext:
-  capabilities:
+  community.general.capabilities:
     drop: [ALL]
     add: [NET_BIND_SERVICE]
   readOnlyRootFilesystem: true

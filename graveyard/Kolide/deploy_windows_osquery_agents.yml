@@ -1,5 +1,5 @@
 - hosts: win_agents
   tasks:
     - win_ping:
-    - include_vars: group_vars/agents
-    - import_tasks: roles/agents/deploy_osquery_windows.yml
+    - ansible.builtin.include_vars: group_vars/agents
+    - ansible.builtin.import_tasks: roles/agents/deploy_osquery_windows.yml

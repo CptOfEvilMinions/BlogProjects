@@ -2,7 +2,7 @@
 # Setup hostname
 ####################################################################
 - name: Set hostname
-  hostname:
+  ansible.builtin.hostname:
     name: '{{ hostname }}.{{ base_domain }}'
 
 - name: Set hostname in /etc/hosts
@@ -23,25 +23,25 @@
 # Apt update
 ####################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Update all packages to the latest version
-  apt:
+  ansible.builtin.apt:
     upgrade: dist
 
 ####################################################################
 # Reboot
 ####################################################################
 - name: Reboot a slow machine that might have lots of updates to apply
-  reboot:
+  ansible.builtin.reboot:
     reboot_timeout: 3600
 
 ####################################################################
 # Install software
 ####################################################################
 - name: Install software
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:

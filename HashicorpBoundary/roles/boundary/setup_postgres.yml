@@ -12,7 +12,7 @@
     state: present
 
 - name: Install Postgres 13
-  apt:
+  ansible.builtin.apt:
     name: ['postgresql-13', 'postgresql-contrib', 'python3-pip', 'libpq-dev', 'acl']
     state: present
 
@@ -58,7 +58,7 @@
   become_user: postgres
 
 - name: Enable and restart Postgres
-  service:
+  ansible.builtin.service:
     name: 'postgresql'
     enabled: true
     state: restarted

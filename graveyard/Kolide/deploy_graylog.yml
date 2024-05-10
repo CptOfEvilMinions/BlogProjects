@@ -2,5 +2,5 @@
   become: true
   become_user: root
   tasks:
-    - import_tasks: roles/init.yml
-    - import_tasks: roles/graylog/deploy_graylog.yml
+    - ansible.builtin.import_tasks: roles/init.yml
+    - ansible.builtin.import_tasks: roles/graylog/deploy_graylog.yml

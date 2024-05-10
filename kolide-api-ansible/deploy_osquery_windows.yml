@@ -1,9 +1,10 @@
-- hosts: 'osquery_windows'
+- name: Install Osquery on Windows
+  hosts: 'osquery_windows'
   tasks:
-    # Request variables for playbook
-    - import_tasks: 'roles/osquery/init.yml'
+    - name: Get Kolide cert and enroll key
+      ansible.builtin.import_tasks: 'roles/osquery/init.yml'
       delegate_to: localhost
-      run_once: true
+      run_once: true # noqa: run-once[task]
 
-    # Install/Setup Osquery on linux
-    - import_tasks: 'roles/osquery/windows/setup_osquery.yml'
+    - name: Install Osquery on Windows
+      ansible.builtin.import_tasks: 'roles/osquery/windows/setup_osquery.yml'
