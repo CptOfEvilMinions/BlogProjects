@@ -2,14 +2,14 @@
 # Setup hostname
 ####################################################################
 - name: Set hostname
-  hostname:
+  ansible.builtin.hostname:
     name: '{{ graylog_hostname }}.{{ base_domain }}'
 
 ####################################################################
 # Install software
 ####################################################################
 - name: Install software
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -22,14 +22,14 @@
 # Install/Setup MongoDB
 ####################################################################
 - name: Install MongoDB
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - mongodb-server
 
 - name: Start Mongo service
-  service:
+  ansible.builtin.service:
     name: mongodb
     state: started
     enabled: true
@@ -38,17 +38,17 @@
 # Install/Setup Elasticsearch
 ####################################################################
 - name: Add Elastic GPG key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
 
 - name: Add Elastic repo
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
     state: present
 
 - name: Install/Setup Elasticsearch
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -70,22 +70,22 @@
 # Install/Setup Graylog
 ####################################################################
 - name: Download and Install Graylog repo
-  apt:
+  ansible.builtin.apt:
     deb: https://packages.graylog2.org/repo/packages/graylog-2.4-repository_latest.deb
 
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Install/Setup Graylog
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - graylog-server
 
 - name: Covert password to sha256 hash
-  shell: "echo -n {{ graylog_admin_password }} | sha256sum | awk '{print $1}'"
+  ansible.builtin.shell: "echo -n {{ graylog_admin_password }} | sha256sum | awk '{print $1}'"
   register: pass_contents
 
 - name: Set admin password
@@ -95,14 +95,14 @@
     line: "root_password_sha2 = {{ pass_contents.stdout }}"
 
 - name: Generate secret key
-  shell: "pwgen -s 96 1"
+  ansible.builtin.shell: "pwgen -s 96 1"
   register: secret_key_content
 
 - name: Set secret key
-  shell: sed -i -e "s/password_secret =.*/password_secret = {{ secret_key_content.stdout }}/" /etc/graylog/server/server.conf
+  ansible.builtin.shell: sed -i -e "s/password_secret =.*/password_secret = {{ secret_key_content.stdout }}/" /etc/graylog/server/server.conf
 
 - name: Start and Enable Graylog service
-  service:
+  ansible.builtin.service:
     name: graylog-server
     state: restarted
     enabled: true
@@ -111,12 +111,12 @@
 # Install/Setup Graylog slack plugin
 ####################################################################
 - name: Download Graylog Slack plugin
-  get_url:
+  ansible.builtin.get_url:
     url: https://github.com/graylog-labs/graylog-plugin-slack/releases/download/2.4.0/graylog-plugin-slack-2.4.0.jar
     dest: /usr/share/graylog-server/plugin/graylog-plugin-slack-2.4.0.jar
 
 - name: Start and Enable Graylog service
-  service:
+  ansible.builtin.service:
     name: graylog-server
     state: restarted
     enabled: true
@@ -125,17 +125,17 @@
 # Install/Setup Nginx
 ####################################################################
 - name: Install/Setup Nginx
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: installed
   with_items:
     - nginx
 
 - name: Backup NGINX config
-  shell: cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+  ansible.builtin.shell: cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 
 - name: Copy Nginx config
-  template:
+  ansible.builtin.template:
     src: conf/nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
     owner: root
@@ -151,27 +151,27 @@
 - file:
     path: /etc/nginx/ssl
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Generate DH key
   ansible.builtin.stat:
     path: /etc/ssl/certs/dhparam.pem
   register: stat_dhparam
 - shell: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 
 - name: Generate DH key
   ansible.builtin.stat:
     path: /etc/nginx/ssl/dhparam.pem
   register: stat_dhparam
 - shell: openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 - shell: |
     openssl req -new -nodes -x509 -days 3650 \
     -subj "/C={{ cert_country }}/ST={{ cert_state }}/L={{ cert_local }}/O={{ cert_org }}/CN={{ graylog_hostname }}.{{ base_domain }}" \
     -keyout /etc/nginx/ssl/graylog.key \
     -out /etc/nginx/ssl/graylog.crt
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 
 - template:
     src: conf/nginx/nginx_graylog.conf
@@ -189,21 +189,21 @@
 # Install/Setup FirewallD
 ####################################################################
 - name: Setup Ubuntu UFW firewall
-  ufw:
+  community.general.ufw:
     rule: allow
     name: OpenSSH
-- ufw:
+- community.general.ufw:
     rule: allow
     port: 80
     proto: tcp
-- ufw:
+- community.general.ufw:
     rule: allow
     port: 443
     proto: tcp
-- ufw:
+- community.general.ufw:
     rule: allow
     port: 5044
     proto: tcp
-- ufw:
+- community.general.ufw:
     state: enabled
     policy: deny

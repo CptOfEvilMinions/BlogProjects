@@ -1,5 +1,7 @@
-- hosts: splunk
+- name: Install/Setup Splunk
+  hosts: splunk
   become: true
   become_user: root
   tasks:
-    - import_tasks: roles/splunk/setup_splunk.yml
+    - name: Install/Setup Splunk
+      ansible.builtin.import_tasks: roles/splunk/setup_splunk.yml

@@ -2,11 +2,11 @@
   become: true
   become_user: root
   tasks:
-    - include_vars: 'group_vars/graylog.yml'
-    - include_vars: 'group_vars/logging.yml'
-    - import_tasks: 'roles/graylog/init.yml'
-    - import_tasks: 'roles/graylog/setup_mongo.yml'
-    - import_tasks: 'roles/graylog/setup_elasticsearch.yml'
-    - import_tasks: 'roles/graylog/setup_graylog.yml'
-    - import_tasks: 'roles/graylog/setup_nginx.yml'
-    - import_tasks: 'roles/graylog/setup_ufw.yml'
+    - ansible.builtin.include_vars: 'group_vars/graylog.yml'
+    - ansible.builtin.include_vars: 'group_vars/logging.yml'
+    - ansible.builtin.import_tasks: 'roles/graylog/init.yml'
+    - ansible.builtin.import_tasks: 'roles/graylog/setup_mongo.yml'
+    - ansible.builtin.import_tasks: 'roles/graylog/setup_elasticsearch.yml'
+    - ansible.builtin.import_tasks: 'roles/graylog/setup_graylog.yml'
+    - ansible.builtin.import_tasks: 'roles/graylog/setup_nginx.yml'
+    - ansible.builtin.import_tasks: 'roles/graylog/setup_ufw.yml'

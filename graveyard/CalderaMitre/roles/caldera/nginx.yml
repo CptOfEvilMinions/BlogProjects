@@ -20,15 +20,15 @@
 - file:
     path: /etc/nginx/ssl
     state: directory
-    mode: 0400
+    mode: "0400"
 
 - name: Copy nginx.conf
-  template:
+  ansible.builtin.template:
     src: conf/nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
 
 - name: Copy nginx_caldera.conf
-  template:
+  ansible.builtin.template:
     src: conf/nginx/nginx_caldera.conf
     dest: /etc/nginx/conf.d/nginx_caldera.conf
 
@@ -37,13 +37,13 @@
     path: /etc/nginx/ssl/dhparam.pem
   register: stat_dhparam
 - shell: openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 - shell: |
     openssl req -new -nodes -x509 -days 3650 \
     -subj "/C={{ cert_country }}/ST={{ cert_state }}/L={{ cert_local }}/O={{ cert_org }}/CN={{ caldera_hostname }}.{{ base_domain }}" \
     -keyout /etc/nginx/ssl/{{ cert_name }}.key \
     -out /etc/nginx/ssl/{{ cert_name }}.crt
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 
 - name: Start Nginx service
   service:

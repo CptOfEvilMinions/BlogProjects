@@ -2,66 +2,66 @@
 # Install/Setup Filebeat
 ################################################################
 - name: Install things
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - 'apt-transport-https'
 
 - name: Add Filebeat key
-  apt_key:
+  ansible.builtin.apt_key:
     url: '{{ filebeat_key }}'
     state: present
 
 - name: Add Filebeat Repo
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: '{{ fileatbeat_repo_url }}'
     state: present
 
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Install filebeat
-  apt:
+  ansible.builtin.apt:
     name: 'filebeat'
     state: latest
 
 - name: Make backup of filebeat.yml
-  copy:
+  ansible.builtin.copy:
     src: '/etc/filebeat/filebeat.yml'
     dest: '/etc/filebeat/filebeat.yml.bak'
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
     remote_src: true
 
 - name: Copy filebeat.yml
-  template:
+  ansible.builtin.template:
     src: 'conf/filebeat/filebeat.yml'
     dest: '/etc/filebeat/filebeat.yml'
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Create Filebeat config directory
-  file:
+  ansible.builtin.file:
     path: '/etc/filebeat/conf.d'
     state: directory
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Copy filebeat.yml bro
-  template:
+  ansible.builtin.template:
     src: 'conf/filebeat/bro.yml'
     dest: '/etc/filebeat/conf.d/bro.yml'
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Start Filebeat service
-  service:
+  ansible.builtin.service:
     name: 'filebeat'
     state: restarted
     enabled: true

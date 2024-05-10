@@ -12,7 +12,7 @@
     state: present
 
 - name: Install Boundary {{ boundary_version }}
-  apt:
+  ansible.builtin.apt:
     name: ['boundary={{ boundary_version }}']
     state: present
 
@@ -28,13 +28,13 @@
     state: present
 
 - name: Create Boundary user
-  user:
+  ansible.builtin.user:
     name: '{{ boundary_user }}'
     group: '{{ boundary_group }}'
     system: true
 
 - name: Create Boundary directory
-  file:
+  ansible.builtin.file:
     path: '{{ item }}'
     state: directory
     owner: '{{ boundary_user }}'
@@ -44,26 +44,26 @@
     - '/etc/boundary/ssl'
 
 - name: Copy Boundary controller service config
-  template:
+  ansible.builtin.template:
     src: 'conf/ansible/boundary_controller/boundary-controller.service'
     dest: '/etc/systemd/system/boundary-controller.service'
     owner: 'root'
     group: 'root'
-    mode: 0644
+    mode: "0644"
 
 - name: Copy Boundary worker service config
-  template:
+  ansible.builtin.template:
     src: 'conf/ansible/boundary_worker/boundary-worker.service'
     dest: '/etc/systemd/system/boundary-worker.service'
     owner: 'root'
     group: 'root'
-    mode: 0644
+    mode: "0644"
 
 ##############################################################
 # Setup Boundary
 ##############################################################
 - name: CURL Vault Root CA
-  get_url:
+  ansible.builtin.get_url:
     url: '{{ vault_addr }}/v1/pki/ca/pem'
     validate_certs: false
     dest: "/etc/ssl/certs/{{ base_domain | replace('.','-') }}-root-ca.crt"
@@ -72,7 +72,7 @@
     mode: '0444'
 
 - name: Copy Boundary intermediate certificate
-  copy:
+  ansible.builtin.copy:
     src: 'conf/tls/boundary_hackinglab_local_pki_int.crt'
     dest: "/etc/boundary/ssl/boundary-{{ base_domain | replace('.','-') }}-pki-int.crt"
     owner: 'root'
@@ -80,7 +80,7 @@
     mode: '0444'
 
 - name: Copy Boundary controller public cert and private key
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/etc/boundary/ssl/{{ item | basename | replace('_','-') }}"
     owner: 'root'
@@ -91,7 +91,7 @@
     - "conf/tls/controller*_boundary_*.key"
 
 - name: Copy Boundary worker public cert and private key
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: "/etc/boundary/ssl/{{ item | basename | replace('_','-') }}"
     owner: 'root'
@@ -108,20 +108,20 @@
     timeout: 20
 
 - name: Copy Boundary controller config
-  template:
+  ansible.builtin.template:
     src: 'conf/ansible/boundary_controller/boundary-controller.hcl'
     dest: '/etc/boundary/boundary-controller.hcl'
     owner: 'root'
     group: 'boundary'
-    mode: 0640
+    mode: "0640"
 
 - name: Copy Boundary worker config
-  template:
+  ansible.builtin.template:
     src: 'conf/ansible/boundary_worker/boundary-worker.hcl'
     dest: '/etc/boundary/boundary-worker.hcl'
     owner: 'root'
     group: 'boundary'
-    mode: 0640
+    mode: "0640"
 
 ##############################################################
 # Init Boundary
@@ -132,14 +132,14 @@
   register: boundary_init
 
 - name: Init Boundary
-  shell: '/usr/bin/boundary database init -config /etc/boundary/boundary-controller.hcl > /tmp/boundary-init.txt'
+  ansible.builtin.shell: '/usr/bin/boundary database init -config /etc/boundary/boundary-controller.hcl > /tmp/boundary-init.txt'
   when: not boundary_init.stat.exists
 
 ##############################################################
 # Start Boundary
 ##############################################################
 - name: Start Boundary controller
-  service:
+  ansible.builtin.service:
     name: 'boundary-controller'
     state: restarted
     enabled: true
@@ -150,7 +150,7 @@
     delay: 10
 
 - name: Start Boundary worker
-  service:
+  ansible.builtin.service:
     name: 'boundary-worker'
     state: restarted
     enabled: true

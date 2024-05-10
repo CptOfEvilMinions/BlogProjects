@@ -2,7 +2,7 @@
 # Install prereqs
 ################################################################
 - name: Install prereqs
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -30,7 +30,7 @@
     dest: '{{ pf_ring_dir }}'
 
 - name: PF_RING/kernel
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '{{ pf_ring_dir }}/kernel'
   with_items:
@@ -39,14 +39,14 @@
   ignore_errors: true
 
 - name: Make PF_RING/userland
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '{{ pf_ring_dir }}/userland'
   with_items:
     - 'make'
 
 - name: Make PF_RING/userland/lib
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '{{ pf_ring_dir }}/userland/lib'
   with_items:
@@ -54,7 +54,7 @@
     - 'make install'
 
 - name: Make PF_RING/userland/libpcap
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '{{ pf_ring_dir }}/userland//libpcap'
   with_items:
@@ -62,7 +62,7 @@
     - 'make install'
 
 - name: Make PF_RING/userland/tcpdump
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '{{ pf_ring_dir }}/userland/tcpdump'
   with_items:
@@ -70,7 +70,7 @@
     - 'make install'
 
 - name: Make PF_RING/kernel
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '{{ pf_ring_dir }}/kernel'
   with_items:
@@ -85,3 +85,4 @@
     path: '/etc/modules'
     line: 'pf_ring'
     create: true
+    mode: "0750"

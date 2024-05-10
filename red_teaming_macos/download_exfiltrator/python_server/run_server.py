@@ -22,7 +22,6 @@ from io import BytesIO
 
 
 class SimpleHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
-
     """Simple HTTP request handler with GET/HEAD/POST commands.
 
     This serves files from the current directory and any of its

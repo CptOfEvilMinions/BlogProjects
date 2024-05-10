@@ -2,14 +2,14 @@
 #  Install/Setup Redis
 ####################################################################
 - name: Install/Setup Redis
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - redis-server
 
 - name: Start redis service
-  service:
+  ansible.builtin.service:
     name: redis-server.service
     state: restarted
     enabled: true

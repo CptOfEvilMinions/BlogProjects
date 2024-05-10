@@ -2,24 +2,24 @@
 # Install deps
 ##################################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Update all packages to the latest version
-  apt:
+  ansible.builtin.apt:
     upgrade: dist
   register: apt_dist_upgrade
 
 - name: Remove dependencies that are no longer required
-  apt:
+  ansible.builtin.apt:
     autoremove: true
 
 - name: Reboot machine
-  reboot:
+  ansible.builtin.reboot:
   when: apt_dist_upgrade is changed
 
 - name: Install software
-  apt:
+  ansible.builtin.apt:
     name: [
       'linux-headers-{{ ansible_kernel }}',
       'wget',
@@ -43,11 +43,11 @@
     state: latest
 
 - name: Remove dependencies that are no longer required
-  apt:
+  ansible.builtin.apt:
     autoremove: true
 
 - name: Mark/freeze kernel version
-  shell: 'apt-mark hold linux-image-generic linux-headers-generic'
+  ansible.builtin.shell: 'apt-mark hold linux-image-generic linux-headers-generic'
 
 ##################################################################################
 # Download pf_ring
@@ -58,13 +58,13 @@
   register: pfring_tar_stat
 
 - name: Download pf_ring
-  get_url:
+  ansible.builtin.get_url:
     url: '{{ pfring_tar_url }}'
     dest: /tmp/pfring-{{ pfring_version }}.tar.gz
   when: not pfring_tar_stat.stat.exists
 
 - name: Create {{ pfring_dir }}
-  file:
+  ansible.builtin.file:
     path: '{{ pfring_dir }}'
     state: directory
     owner: root
@@ -72,7 +72,7 @@
   when: not pfring_tar_stat.stat.exists
 
 - name: Unarchive pfring-{{ pfring_version }}.tar.gz
-  unarchive:
+  ansible.builtin.unarchive:
     src: /tmp/pfring-{{ pfring_version }}.tar.gz
     dest: '{{ pfring_dir }}'
     remote_src: true
@@ -83,31 +83,31 @@
 # Compile and load pf_ring kernel module
 ##################################################################################
 - name: Check if pf_ring module is loaded
-  modprobe:
+  community.general.modprobe:
     name: 'pf_ring'
     state: present
   ignore_errors: true
   register: pf_ring_module_status
 
 - name: Compile pf_ring kernel module
-  make:
+  community.general.make:
     chdir: '{{ pfring_dir }}/kernel'
   when: pf_ring_module_status is failed
 
 - name: Install pf_ring kernel module
-  make:
+  community.general.make:
     chdir: '{{ pfring_dir }}/kernel'
     target: install
   when: pf_ring_module_status is failed
 
 - name: Load pf_ring kernel module
-  shell: 'insmod ./pf_ring.ko'
+  ansible.builtin.shell: 'insmod ./pf_ring.ko'
   args:
     chdir: '{{ pfring_dir }}/kernel'
   when: pf_ring_module_status is failed
 
 - name: Check if pf_ring module is loaded
-  modprobe:
+  community.general.modprobe:
     name: 'pf_ring'
     state: present
 
@@ -120,18 +120,18 @@
   register: libpfring_stat
 
 - name: Configure Libpfring
-  shell: './configure'
+  ansible.builtin.shell: './configure'
   args:
     chdir: '{{ pfring_dir }}/userland/lib'
   when: not libpfring_stat.stat.exists
 
 - name: Make Libpfring
-  make:
+  community.general.make:
     chdir: '{{ pfring_dir }}/userland/lib'
   when: not libpfring_stat.stat.exists
 
 - name: Make install Libpfring
-  make:
+  community.general.make:
     chdir: '{{ pfring_dir }}/userland/lib'
     target: install
   when: not libpfring_stat.stat.exists
@@ -145,18 +145,18 @@
   register: libpcap_stat
 
 - name: Configure Libpcap
-  shell: './configure'
+  ansible.builtin.shell: './configure'
   args:
     chdir: '{{ pfring_dir }}/userland/libpcap'
   when: not libpcap_stat.stat.exists
 
 - name: Make Libpcap
-  make:
+  community.general.make:
     chdir: '{{ pfring_dir }}/userland/libpcap'
   when: not libpcap_stat.stat.exists
 
 - name: Make install Libpcap
-  make:
+  community.general.make:
     chdir: '{{ pfring_dir }}/userland/libpcap'
     target: install
   when: not libpcap_stat.stat.exists
@@ -171,7 +171,7 @@
   register: pf_ringctl_stat
 
 - name: Copy pf_ringctl
-  copy:
+  ansible.builtin.copy:
     src: '/opt/pf_ring/package/usr/local/bin/pf_ringctl'
     dest: '/usr/local/bin/pf_ringctl'
     mode: '750'
@@ -185,15 +185,15 @@
   register: pf_ring_systemed_stat
 
 - name: Copy SystemD
-  copy:
+  ansible.builtin.copy:
     src: '/opt/pf_ring/package/etc/systemd/system/pf_ring.service'
     dest: '/etc/systemd/system/pf_ring.service'
-    mode: 0640
+    mode: "0640"
     remote_src: true
   when: not pf_ringctl_stat.stat.exists
 
 - name: Start pf_ring service
-  systemd:
+  ansible.builtin.systemd:
     name: 'pf_ring'
     state: restarted
     daemon_reload: true

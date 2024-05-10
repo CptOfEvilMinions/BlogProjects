@@ -2,7 +2,7 @@
 # Apt update
 ####################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 
