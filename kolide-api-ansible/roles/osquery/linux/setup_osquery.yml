@@ -2,54 +2,56 @@
 # Install/Setup Osquery
 #########################################################
 - name: Add APT GPG key for Osquery
-  apt_key:
+  ansible.builtin.apt_key:
     keyserver: keyserver.ubuntu.com
     id: "{{ osquery_gpg_key }}"
 
 - name: Add Osquery repo
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ osquery_repo_url }}"
     state: present
 
 - name: Install Osquery
-  apt:
+  ansible.builtin.apt:
     name: osquery
     state: present
 
 - name: Write Kolide public certificate contents to disk
-  copy:
+  ansible.builtin.copy:
     content: "{{ kolide_public_cert }}"
     dest: "/etc/osquery/kolide.crt"
+    mode: "0644"
 
 - name: Sets permissions for /etc/osquery/kolide.crt
-  file:
+  ansible.builtin.file:
     path: '/etc/osquery/kolide.crt'
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
 
 - name: Write Osquery enroll secret to disk
-  copy:
+  ansible.builtin.copy:
     content: "{{ osquery_enroll_secret }}"
     dest: "/etc/osquery/osquery.key"
+    mode: "0400"
 
 - name: Sets permissions for /etc/osquery/osquery.key
-  file:
+  ansible.builtin.file:
     path: '/etc/osquery/osquery.key'
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
 
 - name: Copy Osquery flags file
-  template:
+  ansible.builtin.template:
     src: 'conf/osquery/osquery.flags'
     dest: '/etc/osquery/osquery.flags'
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
 
 - name: Restart Osquery
-  service:
+  ansible.builtin.service:
     name: 'osqueryd'
     state: restarted
     enabled: true

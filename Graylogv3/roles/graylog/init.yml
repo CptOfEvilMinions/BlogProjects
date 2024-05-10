@@ -2,12 +2,12 @@
 # Apt upgrade
 ################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     force_apt_get: true
 
 - name: Upgrade all packages to the latest version
-  apt:
+  ansible.builtin.apt:
     name: "*"
     state: latest
     force_apt_get: true
@@ -23,7 +23,7 @@
 # Set hostname
 ####################################################################
 - name: change hostname to {{ graylog_hostname }}
-  hostname:
+  ansible.builtin.hostname:
     name: "{{ graylog_hostname }}"
 
 - name: add myself to /etc/hosts
@@ -37,7 +37,7 @@
 # Install things
 ####################################################################
 - name: Install things
-  apt:
+  ansible.builtin.apt:
     name: ['apt-transport-https', 'openjdk-8-jre-headless', 'uuid-runtime', 'pwgen']
     state: latest
     force_apt_get: true

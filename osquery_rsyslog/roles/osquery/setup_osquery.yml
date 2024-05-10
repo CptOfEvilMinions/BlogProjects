@@ -2,22 +2,22 @@
 # Install/Setup OSQuery
 ####################################################################
 - name: Add OSQuery repo key for Ubuntu
-  apt_key:
+  ansible.builtin.apt_key:
     keyserver: keyserver.ubuntu.com
     id: 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
 
 - name: Add OSquery repo for Ubuntu
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb [arch=amd64] https://pkg.osquery.io/deb deb main
     state: present
 
 - name: Install OSQuery
-  package:
+  ansible.builtin.package:
     name: osquery
     state: present
 
 - name: Copy OSQuery rules conf
-  template:
+  ansible.builtin.template:
     src: 'conf/osquery/osquery.conf'
     dest: '/etc/osquery/osquery.conf'
     owner: root
@@ -25,7 +25,7 @@
     mode: '0400'
 
 - name: Enable OSQuery service
-  service:
+  ansible.builtin.service:
     name: osqueryd
     state: restarted
     enabled: true

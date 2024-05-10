@@ -7,19 +7,21 @@
 #     dest: "%LOCALAPPDATA%\\osquery-{{ osquery_version }}.msi"
 
 - name: Install Osquery
-  win_package:
+  ansible.windows.win_package:
     path: "{{ osquery_exe_dl_url }}"
     state: present
 
 - name: Write Kolide public certificate contents to disk
-  copy:
+  ansible.builtin.copy:
     content: "{{ kolide_public_cert }}"
     dest: "C:\\Program Files\\osquery\\certs\\kolide.crt"
+    mode: "0644"
 
 - name: Write Osquery enroll secret to disk
-  copy:
+  ansible.builtin.copy:
     content: "{{ osquery_enroll_secret }}"
     dest: "C:\\Program Files\\osquery\\osquery.key"
+    mode: "0400"
 
 - name: Copy Osquery flags file
   ansible.windows.win_template:

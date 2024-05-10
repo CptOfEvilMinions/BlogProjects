@@ -2,8 +2,8 @@
   become: true
   become_user: root
   tasks:
-    - import_tasks: roles/init.yml
-    - import_tasks: roles/kolide/redis.yml
-    - import_tasks: roles/kolide/mysql.yml
-    - import_tasks: roles/kolide/kolide.yml
+    - ansible.builtin.import_tasks: roles/init.yml
+    - ansible.builtin.import_tasks: roles/kolide/redis.yml
+    - ansible.builtin.import_tasks: roles/kolide/mysql.yml
+    - ansible.builtin.import_tasks: roles/kolide/kolide.yml
     # - import_tasks: roles/kolide/filebeat.yml
