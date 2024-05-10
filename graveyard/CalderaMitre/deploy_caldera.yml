@@ -2,8 +2,8 @@
   become: true
   become_user: root
   tasks:
-    - import_tasks: roles/init.yml
-    - import_tasks: roles/caldera/mongo.yml
-    - import_tasks: roles/caldera/caldera.yml
+    - ansible.builtin.import_tasks: roles/init.yml
+    - ansible.builtin.import_tasks: roles/caldera/mongo.yml
+    - ansible.builtin.import_tasks: roles/caldera/caldera.yml
     # - import_tasks: roles/caldera/nginx.yml
-    - import_tasks: roles/caldera/firewall.yml
+    - ansible.builtin.import_tasks: roles/caldera/firewall.yml

@@ -2,25 +2,25 @@
 # Install/Setup Graylog
 ################################################################
 - name: Download Graylog repo
-  get_url:
+  ansible.builtin.get_url:
     url: '{{ graylog_repo_url }}'
     dest: '/tmp/graylog-repository_latest.deb'
 
 - name: Install Graylog repo
-  apt:
+  ansible.builtin.apt:
     deb: '/tmp/graylog-repository_latest.deb'
 
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Install Graylog
-  apt:
+  ansible.builtin.apt:
     name: 'graylog-server'
     state: latest
 
 - name: Covert root_password_sha2
-  shell: "echo -n {{ graylog_admin_password }} | sha256sum | awk '{print $1}'"
+  ansible.builtin.shell: "echo -n {{ graylog_admin_password }} | sha256sum | awk '{print $1}'"
   register: pass_contents
 
 - name: Set root_password_sha2
@@ -30,14 +30,14 @@
     line: "root_password_sha2 = {{ pass_contents.stdout }}"
 
 - name: Generate password_secret
-  shell: "pwgen -s 96 1"
+  ansible.builtin.shell: "pwgen -s 96 1"
   register: secret_key_content
 
 - name: Set password_secret
-  shell: sed -i -e "s/password_secret =.*/password_secret = {{ secret_key_content.stdout }}/" /etc/graylog/server/server.conf
+  ansible.builtin.shell: sed -i -e "s/password_secret =.*/password_secret = {{ secret_key_content.stdout }}/" /etc/graylog/server/server.conf
 
 - name: Start Graylog service
-  service:
+  ansible.builtin.service:
     name: 'graylog-server'
     state: restarted
     enabled: true

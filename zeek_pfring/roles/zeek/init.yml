@@ -2,18 +2,18 @@
 # Apt upgrade
 ################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     force_apt_get: true
 
 - name: Upgrade all packages to the latest version
-  apt:
+  ansible.builtin.apt:
     name: "*"
     state: latest
     force_apt_get: true
 
 - name: Disable kernel updates
-  shell: 'apt-mark hold linux-image-generic linux-headers-generic'
+  ansible.builtin.shell: 'apt-mark hold linux-image-generic linux-headers-generic'
 
 ####################################################################
 #  Setup Timedatectl
@@ -26,7 +26,7 @@
 # Set hostname
 ####################################################################
 - name: change hostname to {{ zeek_hostname }}
-  hostname:
+  ansible.builtin.hostname:
     name: "{{ zeek_hostname }}"
 
 - name: add myself to /etc/hosts
@@ -40,7 +40,7 @@
 # Install things
 ####################################################################
 - name: Install things
-  apt:
+  ansible.builtin.apt:
     name: ['apt-transport-https', 'openjdk-8-jre-headless', 'uuid-runtime', 'pwgen']
     state: latest
     force_apt_get: true
