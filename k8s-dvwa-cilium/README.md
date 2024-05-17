@@ -1,20 +1,16 @@
 # k8s-dvwa-cilium
 
-## Install k3s on Ubuntu
-1. `sudo su`
-1. `curl -sfL https://get.k3s.io | sh -`
-1. `ufw default allow routed`
-1. `ufw allow in on cni0 from 10.42.0.0/16 coment "K3s rule: allow traffic from kube-system pods"`
-1. `ufw allow in on kube-bridge from 10.42.0.0/16 comment "K3s"`
-1. `ufw allow from any to any port 6443 comment "K8s: allow access to kube-api from internal network"`
-1. `ssh superadmin@<k3s IP addr> "cat /etc/rancher/k3s.config | sed "s#default#dumpster#g" > ~/.kube/configs/dumpster.yaml`
-
 ## Init
-1. `kubectl create ns dvwa cilium`
+1. `kubectl create ns dvwa`
 1. `kubectl create secret generic -n dvwa mysql --from-literal=mysql-root-password=$(openssl rand -hex 20) --from-literal=mysql-replication-password=$(openssl rand -hex 20) --from-literal=mysql-password=$(openssl rand -hex 20)`
+1. Add Helm repo: `helm repo add cilium https://helm.cilium.io`
 
 ## Deploy
-1. `helm install k8s-dvwa-cilium . -n dvwa -f values.yaml`
+1. Deploy Cilium with Helm: `helm install cilium cilium/cilium --version 1.15.1 --namespace kube-system -f values-cilium.yaml`
+1. Deploy Tetragon with Helm: `helm install tetragon cilium/tetragon -n kube-system`
+1. Deploy DVWA with Helm: `helm install dvwa . -n dvwa -f values-dvwa.yaml`
+
+
 
 ## References
 * [BlogProjects/k8s-dvwa](https://github.com/CptOfEvilMinions/BlogProjects/blob/main/k8s-dvwa/README.md)

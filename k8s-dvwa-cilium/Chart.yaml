@@ -21,14 +21,9 @@ version: 0.1.0
 appVersion: 0.1.0
 
 dependencies:
-  - name: cilium
-    version: 1.15.1
-    repository: https://helm.cilium.io/
-  - name: tetragon
-    version: 1.1.0
-    repository: https://helm.cilium.io/
   - name: dvwa
-    repository: https://github.com/CptOfEvilMinions/BlogProjects/tree/main/k8s-dvwa
+    repository: https://cptofevilminions.github.io/BlogProjects/
+    version: 0.1.0
   - name: mysql
     version: 10.1.0
     repository: https://charts.bitnami.com/bitnami

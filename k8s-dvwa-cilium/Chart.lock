@@ -1,0 +1,9 @@
+dependencies:
+- name: dvwa
+  repository: https://cptofevilminions.github.io/BlogProjects/
+  version: 0.1.0
+- name: mysql
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.1.0
+digest: sha256:7aa7ebdc4f4b8f1d21d9ccb8a00ae75876fe64dfa6cc5e2ae69c7622f4394b5f
+generated: "2024-05-12T13:08:20.803751-05:00"

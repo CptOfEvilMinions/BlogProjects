@@ -1,58 +1,265 @@
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicy
+# metadata:
+#   name: "block-file-inclusion"
+# spec:
+#   kprobes:
+#   - call: "fd_install"
+#     syscall: false
+#     args:
+#     - index: 0
+#       type: int
+#     - index: 1
+#       type: "file"
+#     selectors:
+#     - matchBinaries:
+#       - operator: "NotIn"
+#         values:
+#           - "/usr/bin/cat"
+#       matchArgs:
+#       - index: 1
+#         operator: "Prefix"
+#         values:
+#           - "/var/www/html/vulnerabilities/"
+
+#       matchActions:
+#       - action: Sigkill
+
+
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicy
+# metadata:
+#   name: "block-file-inclusion"
+# spec:
+#   kprobes:
+#   - call: "fd_install"
+#     syscall: false
+#     args:
+#     - index: 0
+#       type: int
+#     - index: 1
+#       type: "file"
+#     selectors:
+#     - matchPIDs:
+#       - operator: "In"
+#         followForks: false
+#         isNamespacePID: true
+#         values:
+#         - 0
+#         - 1
+#       matchArgs:
+#       - index: 1
+#         operator: "Prefix"
+#         values:
+#           - "/etc/"
+#       matchActions:
+#       - action: Sigkill
+
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicyNamespaced
+# metadata:
+#   name: "block-cat-etc-passwd"
+#   namespace: "dvwa"
+# spec:
+#   kprobes:
+#   - call: "security_file_permission"
+#     syscall: false
+#     args:
+#     - index: 0
+#       type: "file" # (struct file *) used for getting the path
+#     - index: 1
+#       type: "int" # 0x04 is MAY_READ, 0x02 is MAY_WRITE
+#     returnArg:
+#       index: 0
+#     selectors:
+#     # - matchBinaries:
+#     #   - operator: "In"
+#     #     values:
+#     #     - "/usr/bin/more"
+#     #     - "/usr/sbin/apache2"
+#     # - matchPIDs:
+#     #   - operator: In
+#     #     followForks: true
+#     #     isNamespacePID: true
+#     #     values:
+#     #     - 0
+#     #     - 1
+#     - matchArgs:
+#       - index: 0
+#         operator: "Prefix"
+#         values:
+#         - "/etc/"
+#         #- "/etc/passwd" # filter by filename (/etc/passwd)
+#         #- "/etc/services"
+#       # - index: 1
+#       #   operator: "Equal"
+#       #   values:
+#       #   - "4" # filter by type of access (MAY_READ)
+#       matchActions:
+#       - action: Override
+#         argError: -1
+
+
+  # - call: "fd_install"
+  #   syscall: false
+  #   args:
+  #   - index: 0
+  #     type: int
+  #   - index: 1
+  #     type: "file"
+  #   selectors:
+  #   - matchArgs:
+  #     - index: 1
+  #       operator: "Equal"
+  #       values:
+  #       - "/etc/passwd"
+  #     matchActions:
+  #     - action: FollowFD
+  #       argFd: 0
+  #       argName: 1
+  # - call: "sys_read"
+  #   syscall: true
+  #   args:
+  #   - index: 0
+  #     type: "fd"
+  #   - index: 1
+  #     type: "char_buf"
+  #     sizeArgIndex: 3
+  #   - index: 2
+  #     type: "size_t"
+  #   selectors:
+  #   - matchBinaries:
+  #     - operator: In
+  #       values:
+  #       - "/usr/sbin/apache2"
+  #   - matchArgs:
+  #     - index: 0
+  #       operator: "Equal"
+  #       values:
+  #       - "/etc/passwd"
+  #     matchActions:
+  #     - action: Sigkill
+
+  # kprobes:
+  # - call: "open"
+  #   syscall: true
+  #   args:
+  #   - index: 0
+  #     type: "file"
+  #   - index: 1
+  #     type: int
+  #   selectors:
+  #   - matchBinaries:
+  #     - operator: "In"
+  #       values:
+  #       - "/usr/sbin/apache2"
+  #   - matchArgs:
+  #     - index: 1
+  #       operator: "Equal"
+  #       values:
+  #       - "/etc/passwd"
+  #     matchActions:
+  #     - action: Sigkill
+
+
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicyNamespaced
+# metadata:
+#   name: "block-cat-etc-passwd"
+#   namespace: "dvwa"
+# spec:
+#   kprobes:
+#   - call: "sys_openat"
+#     return: true
+#     syscall: true
+#     args:
+#     - index: 0
+#       type: int
+#     - index: 1
+#       type: "string"
+#     - index: 2
+#       type: "int"
+#     returnArg:
+#       index: 0
+#     selectors:
+#     - matchPIDs:
+#       matchArgs:
+#       - index: 1
+#         operator: "Prefix"
+#         values:
+#         - "/etc/"
+#       matchActions:
+#       - action: Override
+#         argError: -2
+
+
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicyNamespaced
+# metadata:
+#   name: "block-cat-etc-passwd"
+#   namespace: "dvwa"
+# spec:
+#   kprobes:
+#   - call: "security_file_permission"
+#     syscall: false
+#     return: true
+#     args:
+#     - index: 0
+#       type: "file" # (struct file *) used for getting the path
+#     - index: 1
+#       type: "int" # 0x04 is MAY_READ, 0x02 is MAY_WRITE
+#     returnArg:
+#       index: 0
+#       type: "int"
+#     returnArgAction: "Post"
+#     selectors:
+#     - matchArgs:
+#       - index: 0
+#         operator: "Equal"
+#         values:
+#         - "/etc/hosts" # the files that we care
+#       - index: 1
+#         operator: "Equal"
+#         values:
+#         - "4" # MAY_WRITE
+#       matchActions:
+#       - action: Override
+#         argError: -1
+
 ---
 apiVersion: cilium.io/v1alpha1
-kind: TracingPolicy
+kind: TracingPolicyNamespaced
 metadata:
-  name: "block-file-inclusion"
+  name: "block-cat-etc-passwd"
+  namespace: "dvwa"
 spec:
   kprobes:
-  - call: "fd_install"
+  - call: "security_file_open"
     syscall: false
+    return: true
     args:
     - index: 0
-      type: int
-    - index: 1
       type: "file"
-    selectors:
-    - matchBinaries:
-      - operator: "NotIn"
-        values:
-          - "/usr/bin/cat"
-      matchArgs:
-      - index: 1
-        operator: "Prefix"
-        values:
-          - "/var/www/html/vulnerabilities/"
-
-      matchActions:
-      - action: Sigkill
-
-
----
-apiVersion: cilium.io/v1alpha1
-kind: TracingPolicy
-metadata:
-  name: "block-file-inclusion"
-spec:
-  kprobes:
-  - call: "fd_install"
-    syscall: false
-    args:
-    - index: 0
-      type: int
-    - index: 1
-      type: "file"
+    returnArg:
+      type: "int"
+      index: 0
     selectors:
     - matchPIDs:
-      - operator: "In"
-        followForks: false
-        isNamespacePID: true
+      - operator: In
+        followForks: true
         values:
         - 0
         - 1
       matchArgs:
-      - index: 1
-        operator: "Prefix"
+      - index: 0
+        operator: "Equal"
         values:
-          - "/etc/"
+        - "/etc/hosts"
       matchActions:
-      - action: Sigkill
+      - action: Override
+        argError: -2
