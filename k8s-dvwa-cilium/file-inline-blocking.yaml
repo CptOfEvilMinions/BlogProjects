@@ -1,0 +1,32 @@
+---
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: "file-shadow-open"
+  namespace: "dvwa"
+spec:
+  kprobes:
+  - call: "security_file_open"
+    syscall: false
+    args:
+    - index: 0
+      type: "file" # (struct file *) used for getting the path
+    selectors:
+    - matchArgs:
+      - index: 0
+        operator: "Equal"
+        values:
+        - "/etc/shadow"
+        - "/etc/passswd"
+        - "/etc/hosts"
+      matchBinaries:
+      - operator: "In"
+        values:
+        - "/usr/bin/cat"
+        - "/bin/cat"
+        - "/usr/sbin/apache2"
+        - "/usr/bin/python"
+        - "/usr/bin/python3"
+      matchActions:
+      - action: Override
+        argError: -1

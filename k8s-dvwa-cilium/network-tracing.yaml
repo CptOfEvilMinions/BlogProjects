@@ -1,0 +1,20 @@
+---
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicy
+metadata:
+  name: network-tracing
+  namespace: "dvwa"
+spec:
+  parser:
+    dns:
+      enable: true
+    interface:
+      enable: true
+      packet: true
+    tcp:
+      enable: true
+      statsInterval: 20
+    udp:
+      cgroup: true
+      enable: true
+      statsInterval: 20

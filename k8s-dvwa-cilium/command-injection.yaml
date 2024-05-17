@@ -20,38 +20,88 @@
 #           #   - -c "ping  -c 4 8.8.8.8; whoami"
 #           matchActions:
 #           - action: Sigkill
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicy
+# metadata:
+#   name: "block-command-injection"
+# spec:
+#   kprobes:
+#   - call: "execve"
+#     syscall: false
+#     args:
+#     - index: 0
+#       type: "file"
+#     - index: 1
+#       type: "string"
+#     - index: 2
+#       type: "string"
+#     selectors:
+#     - matchPIDs:
+#       - operator: "NotIn"
+#         followForks: false
+#         isNamespacePID: true
+#         values:
+#         - 0
+#         - 1
+#       # matchArgs:
+#       # - index: 1
+#       #   operator: "Prefix"
+#       #   values:
+#       #   - "/usr/share/nginx/html/"
+#       matchBinaries:
+#       - operator: "In"
+#         values:
+#           - "/usr/bin/whoami"
+#       matchActions:
+#       - action: Sigkill
+
+
+# ---
+# apiVersion: cilium.io/v1alpha1
+# kind: TracingPolicyNamespaced
+# metadata:
+#   name: "block-command-injection"
+#   namespace: "dvwa"
+# spec:
+#   podSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: dvwa
+#   kprobes:
+#   - call: "__x64_sys_execve"
+#     syscall: true
+#     args:
+#     - index: 0
+#       type: "string"
+#     selectors:
+#     - matchArgs:
+#       - index: 0
+#         operator: "Equal"
+#         values:
+#         - "-c \"ping  -c 4 8.8.8.8; whoami\""
+#       matchActions:
+#       - action: Sigkill
+
+
 ---
 apiVersion: cilium.io/v1alpha1
-kind: TracingPolicy
+kind: TracingPolicyNamespaced
 metadata:
-  name: "block-command-injection"
+  name: "block-sh-child"
+  namespace: "dvwa"
 spec:
   kprobes:
-  - call: "execve"
-    syscall: false
-    args:
-    - index: 0
-      type: "file"
-    - index: 1
-      type: "string"
-    - index: 2
-      type: "string"
-    selectors:
-    - matchPIDs:
-      - operator: "NotIn"
-        followForks: false
-        isNamespacePID: true
-        values:
-        - 0
-        - 1
-      # matchArgs:
-      # - index: 1
-      #   operator: "Prefix"
-      #   values:
-      #   - "/usr/share/nginx/html/"
-      matchBinaries:
-      - operator: "In"
-        values:
-          - "/usr/bin/whoami"
-      matchActions:
-      - action: Sigkill
+    - call: "execve"
+      syscall: true
+      selectors:
+        - matchBinaries:
+          - operator: "In"
+            values:
+              #- "/bin/sh"
+              - "/usr/bin/whoami"
+          # matchArgs:
+          # - index: 1
+          #   operator: "Equal"
+          #   values:
+          #   - -c "ping  -c 4 8.8.8.8; whoami"
+          matchActions:
