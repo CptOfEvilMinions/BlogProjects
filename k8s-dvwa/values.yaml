@@ -98,6 +98,8 @@ affinity: {}
 mysql:
   enabled: true
   architecture: standalone
+  image:
+    tag: 5.7-debian-11
   auth:
     createDatabase: true
     database: dvwa

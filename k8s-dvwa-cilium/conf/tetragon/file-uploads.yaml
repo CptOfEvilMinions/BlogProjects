@@ -1,0 +1,85 @@
+---
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: "block-uploading-files-with-php-extension"
+  namespace: "dvwa"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: dvwa
+      app.kubernetes.io/name: dvwa
+  kprobes:
+  - call: "do_renameat2"
+    syscall: false
+    return: true
+    args:
+    - index: 0
+      type: int
+    - index: 1
+      type: "filename"
+    - index: 2
+      type: int
+    - index: 3
+      type: "filename"
+    returnArg:
+      index: 0
+      type: "int"
+    returnArgAction: "Post"
+    selectors:
+    - matchPIDs:
+      - operator: In
+        followForks: true
+        isNamespacePID: true
+        values:
+        - 1
+    - matchArgs:
+      - index: 1
+        operator: "Prefix"
+        values:
+        - "../../hackable/uploads"
+      - index: 1
+        operator: "Postfix"
+        values:
+          - ".php"
+    - matchActions:
+      - action: Override
+        argError: -1
+      - action: Post
+      #- action: Sigkill
+
+
+  # - call: "sys_rename"
+  #   syscall: true
+  #   return: true
+  #   args:
+  #   - index: 0
+  #     type: "string"
+  #   - index: 1
+  #     type: "string"
+  #   returnArg:
+  #     index: 0
+  #     type: "int"
+  #   returnArgAction: "Post"
+  #   selectors:
+  #   - matchPIDs:
+  #     - operator: In
+  #       followForks: true
+  #       isNamespacePID: true
+  #       values:
+  #       - 1
+  #   - matchArgs:
+  #     - index: 1
+  #       operator: "Prefix"
+  #       values:
+  #         - "../../hackable/uploads"
+  #     - index: 1
+  #       operator: "Postfix"
+  #       values:
+  #         - ".php"
+  #     matchActions:
+  #     - action: Override
+  #       argError: -1
+  #     # - action: Signal
+  #     #   argSig: 1
+  #     # - action: Post

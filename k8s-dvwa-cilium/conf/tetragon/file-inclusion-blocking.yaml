@@ -1,0 +1,43 @@
+---
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: "block-non-var-www-file-access"
+  namespace: "dvwa"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: dvwa
+      app.kubernetes.io/name: dvwa
+  kprobes:
+  - call: "security_file_open"
+    syscall: false
+    return: true
+    args:
+    - index: 0
+      type: "file" # (struct file *) used for getting the path
+    returnArg:
+      index: 0
+      type: "int"
+    returnArgAction: "Post"
+    selectors:
+    - matchPIDs:
+      - operator: In
+        followForks: true
+        isNamespacePID: true
+        values:
+          - 1 # Apache root
+    # - matchBinaries:
+    #   - operator: "In"
+    #     values:
+    #     - "/usr/sbin/apache2"
+      matchArgs:
+      - index: 0
+        operator: "NotPrefix"
+        values:
+        - "/var/www/html/"
+        - "/tmp/sess_"
+      matchActions:
+      - action: Override
+        argError: -2
+      - action: Post

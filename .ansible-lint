@@ -16,6 +16,8 @@ exclude_paths:
   - kolide-docker/docker-compose-stack.yml
   - "**/docker-compose-*.yml"
   - graveyard/
+  - "k8s-**"
+  ### Helm charts ###
   - "**/values.yaml"
   - "**/values-example.yaml"
   - "microk8s/synology-storage/**"
@@ -25,6 +27,7 @@ exclude_paths:
   - "suricatav5-pf_ring/"
   - "HashicorpBoundary/"
   - "Graylogv3/"
+
 
 # parseable: true
 # quiet: true

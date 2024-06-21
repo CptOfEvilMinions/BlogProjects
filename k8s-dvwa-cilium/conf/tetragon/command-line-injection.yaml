@@ -1,0 +1,39 @@
+---
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicyNamespaced
+metadata:
+  name: "command-line-injection"
+  namespace: "dvwa"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: dvwa
+      app.kubernetes.io/name: dvwa
+  kprobes:
+  - call: "sys_execve"
+    syscall: true
+    return: true
+    args:
+    - index: 0
+      type: "string" # file path
+    returnArg:
+      index: 0
+      type: "int"
+    returnArgAction: "Post"
+    selectors:
+    - matchPIDs:
+      - operator: In
+        followForks: true
+        isNamespacePID: true
+        values:
+          - 1 # Apache root
+      matchArgs:
+      - index: 0
+        operator: "NotEqual"
+        values:
+          - "/usr/bin/ping"
+          - "/bin/sh"
+      matchActions:
+      - action: Override
+        argError: -1
+      - action: Post
