@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "dvwa.selectorLabels" . | nindent 6 }}
-  template:
+  ansible.builtin.template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:

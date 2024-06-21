@@ -2,9 +2,9 @@
   become: true
   become_user: root
   tasks:
-    - include_vars: group_vars/grr
-    - import_tasks: roles/server/init.yml
-    - import_tasks: roles/server/mysql.yml
-    - import_tasks: roles/server/grr.yml
-    - import_tasks: roles/server/nginx.yml
-    - import_tasks: roles/server/firewall.yml
+    - ansible.builtin.include_vars: group_vars/grr
+    - ansible.builtin.import_tasks: roles/server/init.yml
+    - ansible.builtin.import_tasks: roles/server/mysql.yml
+    - ansible.builtin.import_tasks: roles/server/grr.yml
+    - ansible.builtin.import_tasks: roles/server/nginx.yml
+    - ansible.builtin.import_tasks: roles/server/firewall.yml

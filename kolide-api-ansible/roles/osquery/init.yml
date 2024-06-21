@@ -8,21 +8,23 @@
   run_once: true
   register: cert
 
-- set_fact:
+- name: Set Kolide cert to var
+  ansible.builtin.set_fact:
     kolide_public_cert: "{{ cert.cert }}"
 
 #########################################################
 # Get Osquery enroll secret from Kolide
 #########################################################
 - name: Get Osquery enrollment secret from Kolide
-  uri:
+  ansible.builtin.uri:
     url: "https://{{ kolide_hostname }}:{{ kolide_port }}/api/v1/kolide/spec/enroll_secret"
     method: GET
     return_content: true
     validate_certs: false
     headers:
-      Authorization: "Bearer {{ lookup('env','KOLIDE_TOKEN') }}"
+      Authorization: "Bearer {{ lookup('env', 'KOLIDE_TOKEN') }}"
   register: enroll_secret
 
-- set_fact:
+- name: Set Kolide enroll token to var
+  ansible.builtin.set_fact:
     osquery_enroll_secret: "{{ enroll_secret.json.specs.secrets[0].secret }}"

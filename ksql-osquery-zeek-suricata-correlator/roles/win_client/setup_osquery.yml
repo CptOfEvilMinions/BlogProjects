@@ -3,10 +3,10 @@
 # https://github.com/polylogyx/osq-ext-bin
 ####################################################################
 - name: Install chocolatey
-  win_shell: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+  ansible.windows.win_shell: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 - name: Install OSQuery with chocolatey
-  win_chocolatey:
+  chocolatey.chocolatey.win_chocolatey:
     name: osquery
     params: "/InstallService"
     state: present
@@ -14,27 +14,27 @@
     version: '{{ osquery_version }}'
 
 - name: Copy OSQuery.flags
-  win_template:
+  ansible.windows.win_template:
     src: conf/windows-osquery/osquery.flags
     dest: C:\ProgramData\osquery\osquery.flags
 
 - name: Copy OSQuery.conf
-  win_template:
+  ansible.windows.win_template:
     src: conf/windows-osquery/osquery.conf
     dest: C:\ProgramData\osquery\osquery.conf
 
 - name: Copy extensions.load
-  win_template:
+  ansible.windows.win_template:
     src: conf/windows-osquery/extensions.load
     dest: C:\ProgramData\osquery\extensions.load
 
 - name: Download plgx_win_extension.ext.exe
-  win_get_url:
+  ansible.windows.win_get_url:
     url: '{{ polylogyx_osq_ext_bin_url }}'
     dest: C:\ProgramData\osquery\plgx_win_extension.ext.exe
 
 - name: Set permissions for polylogyx extension
-  win_shell: 'icacls C:\ProgramData\osquery\plgx_win_extension.ext.exe {{ item }}'
+  ansible.windows.win_shell: 'icacls C:\ProgramData\osquery\plgx_win_extension.ext.exe {{ item }}'
   with_items:
     - '/setowner Administrators /t'
     - '/grant Administrators:f /t'
@@ -42,7 +42,7 @@
     - '/inheritance:d /t'
 
 - name: Restart Osquery
-  win_service:
+  ansible.windows.win_service:
     name: osqueryd
     state: restarted
     start_mode: auto

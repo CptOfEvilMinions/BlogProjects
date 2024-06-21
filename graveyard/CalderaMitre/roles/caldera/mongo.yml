@@ -2,19 +2,19 @@
 # Install/Setup MongoDB
 ####################################################################
 - name: Install MongoDB
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - mongodb-server
 
 - name: Copy Mongo conf
-  template:
+  ansible.builtin.template:
     src: conf/mongo/mongodb.conf
     dest: /etc/mongodb.conf
 
 - name: Start Mongo service
-  service:
+  ansible.builtin.service:
     name: mongodb
     state: restarted
     enabled: true

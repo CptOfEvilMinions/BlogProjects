@@ -1,8 +1,8 @@
 ####################################################################
-# Install sofrware
+# Install software
 ####################################################################
 - name: Install dependencies for Zeek
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -31,7 +31,7 @@
     repo: https://github.com/zeek/zeek
     recursive: true
     dest: '/tmp/zeek'
-  when: zeek_compile.stat.exists == False
+  when: not zeek_compile.stat.exists
 
 ####################################################################
 # Install/Setup GeoIP
@@ -48,59 +48,59 @@
   ansible.builtin.stat:
     path: '/usr/share/GeoIP/GeoLite2-City.mmdb'
   register: geoip_db
-  when: zeek_geoip == True
+  when: zeek_geoip
 
 - name: Install libmaxminddb
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - libmaxminddb-dev
-  when: zeek_geoip == True
+  when: zeek_geoip
 
 - name: Download and extract GeoIP database
-  unarchive:
+  ansible.builtin.unarchive:
     src: '{{ zeek_geoip_db_url }}'
     dest: '/usr/share/GeoIP/'
     remote_src: true
     extra_opts: [--strip-components=1]
-  when: geoip_db.stat.exists == False and zeek_geoip == True
+  when: not geoip_db.stat.exists and zeek_geoip
 
 ####################################################################
 # Compile Zeek from source
 ####################################################################
 - name: Debug msg
-  debug:
+  ansible.builtin.debug:
     msg: 'WARNING - Compiling Zeek from source can take up to 30mins'
-  when: zeek_compile.stat.exists == False
+  when: not zeek_compile.stat.exists
 
 - name: Compile Zeek from source
-  shell: '{{ item }}'
+  ansible.builtin.shell: '{{ item }}'
   args:
     chdir: '/tmp/zeek'
   with_items:
     - './configure --with-pcap={{ pf_ring_dir }} --prefix={{ zeek_base }}/'
     - 'make'
     - 'make install'
-  when: zeek_compile.stat.exists == False
+  when: not zeek_compile.stat.exists
 
 - name: Test GeoIP
-  shell: './bro -e "print lookup_location(8.8.8.8);"'
+  ansible.builtin.shell: './bro -e "print lookup_location(8.8.8.8);"'
   args:
     chdir: '{{ zeek_base }}/bin'
-  when: zeek_geoip == True
+  when: zeek_geoip
 
 ####################################################################
 # Create Zeek user and set perms
 ####################################################################
 - name: Create Zeek user
-  user:
+  ansible.builtin.user:
     name: '{{ zeek_user }}'
     shell: /usr/sbin/nologin
     home: '{{ zeek_base }}'
 
-- name: 'setcap cap_net_raw,cap_net_admin=eip {{ zeek_base }}/bin/bro'
-  capabilities:
+- name: Permissions 'setcap cap_net_raw,cap_net_admin=eip {{ zeek_base }}/bin/bro'
+  community.general.capabilities:
     path: '{{ zeek_base }}/bin/bro'
     capability: '{{ item }}'
     state: present
@@ -109,24 +109,26 @@
     - 'cap_net_admin+eip'
 
 - name: Set Zeek base dir perms
-  file:
+  ansible.builtin.file:
     path: '{{ zeek_base }}'
     owner: '{{ zeek_user }}'
     group: '{{ zeek_user }}'
     recurse: true
 
 - name: Add Zeek to system-wide $PATH
-  copy:
+  ansible.builtin.copy:
     dest: /etc/profile.d/zeek-path.sh
     content: 'PATH=$PATH:{{ zeek_base }}/bin'
+    mode: "0750"
 
 ####################################################################
 # Configure Zeek
 ####################################################################
 - name: 'Copy Zeek configs'
-  template:
+  ansible.builtin.template:
     src: 'conf/zeek/{{ item }}'
     dest: '{{ zeek_base }}/etc/{{ item }}'
+    mode: "0640"
     owner: '{{ zeek_user }}'
     group: '{{ zeek_user }}'
   with_items:
@@ -149,9 +151,10 @@
     - 'redef LogAscii::use_json = T;'
 
 - name: Create scripts directory for custom Zeek scripts
-  file:
+  ansible.builtin.file:
     path: '{{ zeek_base }}/share/bro/scripts'
     state: directory
+    mode: "0775"
     owner: '{{ zeek_user }}'
     group: '{{ zeek_user }}'
 
@@ -165,7 +168,7 @@
   with_items:
     - '# Zeek file extraction'
     - '@load policy/frameworks/files/extract-all-files.bro'
-  when: zeek_file_extraction == True
+  when: zeek_file_extraction
 
 - name: Enable Zeek stats
   ansible.builtin.lineinfile:
@@ -174,23 +177,24 @@
   with_items:
     - '# Zeek stats'
     - '@load policy/misc/stats.bro'
-  when: zeek_stats == True
+  when: zeek_stats
 
 - name: Copy custom Zeek scripts
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: '{{ zeek_base }}/share/bro/scripts/{{ item | basename }}'
+    mode: "0640"
     owner: '{{ zeek_user }}'
     group: '{{ zeek_user }}'
   with_fileglob:
     - 'conf/zeek/scripts/*'
-  when: zeek_custom_scripts == True
+  when: zeek_custom_scripts
 
 - name: Add commnet for custom scripts
   ansible.builtin.lineinfile:
     path: '{{ zeek_base }}/share/bro/site/local.bro'
     line: '# Zeek custom scripts'
-  when: zeek_custom_scripts == True
+  when: zeek_custom_scripts
 
 - name: Enable Zeek file extraction
   ansible.builtin.lineinfile:
@@ -198,13 +202,13 @@
     line: '@load scripts/{{ item | basename }}'
   with_fileglob:
     - 'conf/zeek/scripts/*'
-  when: zeek_custom_scripts == True
+  when: zeek_custom_scripts
 
 ####################################################################
 # Zeek deploy
 ####################################################################
 - name: Run Bro deploy
-  shell: '{{ zeek_base }}/bin/broctl {{ item }}'
+  ansible.builtin.shell: '{{ zeek_base }}/bin/broctl {{ item }}'
   become: true
   become_user: '{{ zeek_user }}'
   with_items:

@@ -2,57 +2,57 @@
 #  Install/Setup Kolide
 ####################################################################
 - name: Create Kolide user
-  user:
+  ansible.builtin.user:
     name: kolide
     shell: /usr/sbin/nologin
 
 - name: Create Kolide log directory
-  file:
+  ansible.builtin.file:
     path: '{{ log_dir }}'
     state: directory
     owner: kolide
     group: root
 
 - name: Create Kolide conf directory
-  file:
+  ansible.builtin.file:
     path: /etc/kolide
     state: directory
     owner: root
     group: root
 
 - name: Copy Kolide conf
-  template:
+  ansible.builtin.template:
     src: conf/kolide/kolide.yml
     dest: /etc/kolide/kolide.yml
     owner: root
     group: root
 
 - name: Install unzip
-  package:
+  ansible.builtin.package:
     name: unzip
     state: latest
 
 - name: Download Kolide
-  unarchive:
+  ansible.builtin.unarchive:
     src: https://dl.kolide.co/bin/fleet_latest.zip
     dest: /usr/local/bin
     remote_src: true
 
 - name: Intialize Kolide database
-  shell: /usr/local/bin/linux/fleet_linux_amd64 prepare db --config /etc/kolide/kolide.yml
+  ansible.builtin.shell: /usr/local/bin/linux/fleet_linux_amd64 prepare db --config /etc/kolide/kolide.yml
 
 - name: Create kolide user
-  user:
+  ansible.builtin.user:
     name: kolide
     shell: /usr/sbin/nologin
 
 - name: Copy Kolide SystemD
-  template:
+  ansible.builtin.template:
     src: conf/kolide/kolide.service
     dest: /etc/systemd/system/kolide.service
 
 - name: Start Kolide service
-  service:
+  ansible.builtin.service:
     name: kolide
     state: restarted
     enabled: true
@@ -61,14 +61,14 @@
 # Install/Setup Nginx
 ####################################################################
 - name: Install/Setup Nginx
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - nginx
 
 - name: Backup nginx conf
-  shell: cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+  ansible.builtin.shell: cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 
 - file:
     path: /etc/nginx/ssl
@@ -79,15 +79,15 @@
 - file:
     path: /etc/nginx/ssl
     state: directory
-    mode: 0400
+    mode: "0400"
 
 - name: Copy nginx.conf
-  template:
+  ansible.builtin.template:
     src: conf/nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
 
 - name: Copy nginx_kolide.conf
-  template:
+  ansible.builtin.template:
     src: conf/nginx/nginx_kolide.conf
     dest: /etc/nginx/conf.d/nginx_kolide.conf
 
@@ -96,16 +96,16 @@
     path: /etc/nginx/ssl/dhparam.pem
   register: stat_dhparam
 - shell: openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 - shell: |
     openssl req -new -nodes -x509 -days 3650 \
     -subj "/C={{ cert_country }}/ST={{ cert_state }}/L={{ cert_local }}/O={{ cert_org }}/CN={{ fleet_hostname }}.{{ base_domain }}" \
     -keyout /etc/nginx/ssl/kolide.key \
     -out /etc/nginx/ssl/kolide.crt
-  when: stat_dhparam.stat.exists == False
+  when: not stat_dhparam.stat.exists
 
 - name: Start Nginx service
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
     enabled: true

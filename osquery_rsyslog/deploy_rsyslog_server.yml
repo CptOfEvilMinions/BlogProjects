@@ -1,6 +1,9 @@
-- hosts: 'rsyslog-server'
+- name: Install/Setup Rsyslog server
+  hosts: 'rsyslog-server'
   become: true
   become_user: root
   tasks:
-    - include_vars: 'group_vars/logging.yml'
-    - import_tasks: 'roles/rsyslog_server/setup_rsyslog.yml'
+    - name: Import variables for rsyslog server
+      ansible.builtin.include_vars: 'group_vars/logging.yml'
+    - name: Install/Setup Rsyslog server
+      ansible.builtin.import_tasks: 'roles/rsyslog_server/setup_rsyslog.yml'

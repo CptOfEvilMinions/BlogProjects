@@ -2,11 +2,11 @@
 # Apt update
 ####################################################################
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 ####################################################################
 #  Setup Timedatectl
 ####################################################################
 - name: Set time to {{ timezone }}
-  shell: timedatectl set-ntp on && timedatectl set-timezone {{ timezone }}
+  ansible.builtin.shell: timedatectl set-ntp on && timedatectl set-timezone {{ timezone }}

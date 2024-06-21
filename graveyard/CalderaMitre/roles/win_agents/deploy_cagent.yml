@@ -21,11 +21,11 @@
     dest: C:\Program Files\cagent\cagent.exe
 
 - name: Install cagent.exe
-  win_shell: .\cagent.exe --startup auto install
+  ansible.windows.win_shell: .\cagent.exe --startup auto install
   args:
     chdir: C:\Program Files\cagent
 
 - name: Install cagent.exe
-  win_shell: .\cagent.exe start
+  ansible.windows.win_shell: .\cagent.exe start
   args:
     chdir: C:\Program Files\cagent
