@@ -16,6 +16,7 @@ exclude_paths:
   - kolide-docker/docker-compose-stack.yml
   - "**/docker-compose-*.yml"
   - graveyard/
+  - "k8s-**"
 
 # parseable: true
 # quiet: true

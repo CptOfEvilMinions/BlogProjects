@@ -1,0 +1,162 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: dvwa-allow-external-ingress
+  namespace: dvwa
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: dvwa
+      app.kubernetes.io/name: dvwa
+  ingress:
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+          - port: "80"
+            protocol: TCP
+          rules:
+            http:
+            ########################################## General ##########################################
+            # Allow access to CSS, Javascript, and images
+            - method: "GET"
+              path: "/dvwa/(images|css|js)/\\w+(\\.css|\\.png|\\.js)$"
+            # Allow access to vuln pages
+            - method: "GET"
+              path: "/vulnerabilities/\\w+(/)?$"
+            # Homepage, instrucitons, about, phpinfo, favicon
+            - method: "GET"
+              path: "/(index.php|instructions.php|about.php|phpinfo.php|favicon.ico)?$"
+            # Login/logout
+            - method: "GET"
+              path: "/login.php"
+            - method: "POST"
+              path: "/login.php"
+            - method: "GET"
+              path: "/logout.php"
+            # Security
+            - method: "GET"
+              path: "/security.php"
+            - method: "POST"
+              path: "/security.php"
+            ########################################## Brute force ##########################################
+            # Good: /vulnerabilities/brute/?username=blah&password=blah&Login=Login
+            # Regex101: https://regex101.com/r/vX3asw/1
+            # [dvwa-cilium-envoy-ext-rate-limiting.yaml](dvwa-cilium-envoy-ext-rate-limiting.yaml)
+            - method: "GET"
+              path: /vulnerabilities/brute/\?username=\w+&password=\w+&Login=Login$
+            ########################################## Command line injection ##########################################
+            - method: "POST"
+              path: "/vulnerabilities/exec/"
+            ########################################## CSRF ##########################################
+            # Good: /vulnerabilities/csrf/?password_new=blah&password_conf=blah&Change=Change#
+            # Regex101: https://regex101.com/r/AxwUX5/1
+            - method: "GET"
+              path: /vulnerabilities\/csrf\/\?password_new=\w+&password_conf=\w+&Change=Change(#)?$
+            ########################################## File inclusion ##########################################
+            # Good: /vulnerabilities/fi/?page=file1.php
+            # Bad: /vulnerabilities/fi/?page=../../../../../../etc/passwd
+            # Bad: /vulnerabilities/fi/?page=/etc/passwd
+            # Regex101: https://regex101.com/r/aM1H9R/1
+            - method: "GET"
+              path: /vulnerabilities\/fi\/\?page=\w+\.php$
+            ########################################## File upload ##########################################
+            # Allow GET requests to the webpage
+            - method: GET
+              path: "/vulnerabilities/upload$"
+            # Allow JPEG uploads
+            - method: POST
+              path: "/vulnerabilities/upload$"
+              headers:
+                - 'Content-Type: image/jpeg'
+            # Allow PNG uploads
+            - method: POST
+              path: "/vulnerabilities/upload$"
+              headers:
+                - 'Content-Type: image/png'
+            ########################################## SQL injection ##########################################
+            - method: "GET"
+              path: /vulnerabilities/(sqli|sqli_blind)/\?id=\d+&Submit=Submit(#)?$
+            ########################################## XSS ##########################################
+            # Good: /vulnerabilities/xss_r/?name=bob#
+            # Bad: /vulnerabilities/xss_r/?name=<script>alert("xss")<%2Fscript>#
+            # Regex101: https://regex101.com/r/OT3gFy/1
+            - method: "GET"
+              path: /vulnerabilities\/xss_r\/\?name=\w+(#)?$
+            # Good: /vulnerabilities/xss_d/?default=English
+            # Bad: /vulnerabilities/xss_d/?default=<script>alert("xss")<%2Fscript>#
+            # Regex101: https://regex101.com/r/TEVesk/1
+            - method: "GET"
+              path: /vulnerabilities\/xss_d\/\?default=\w+(#)?$
+            ########################################## Authorisation Bypass ##########################################
+            - method: "GET"
+              path: /vulnerabilities\/authbypass\/authbypass.js$
+            - method: "GET"
+              path: /vulnerabilities\/authbypass\/get_user_data\.php$
+              #<TODO>: Enforce PHP cookie header
+            ########################################## Block Open HTTP redirect ##########################################
+            # Good: /vulnerabilities/open_redirect/source/low.php?redirect=info.php?id=1
+            # Good: /vulnerabilities/open_redirect/source/low.php?redirect=https://dev-123456.okta.com?id=1
+            # Bad: /vulnerabilities/open_redirect/source/low.php?redirect=http://github.com?id=1
+            # Regex101: https://regex101.com/r/4Lym0F/1
+            - method: "GET"
+              path: /vulnerabilities\/open_redirect\/source\/low\.php\?redirect=(info.php|https://dev-123456\.okta\.com)\?id=\d$
+  egress:
+    # Allow ICMP egress
+    # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+    # ICMP type 8 is Echo
+    - icmps:
+      - fields:
+        - type: 8
+          family: IPv4
+        - type: 8
+          family: IPv6
+    # Allow DNS
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": kube-system
+          "k8s:k8s-app": kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+          rules:
+            dns:
+                - matchPattern: '*.dvwa.svc.cluster.local'
+    # Allow access to MySQL
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": dvwa
+          "k8s:app.kubernetes.io/name": mysql
+          "k8s:app.kubernetes.io/component": primary
+          "k8s:app.kubernetes.io/instance": dvwa
+      toPorts:
+        - ports:
+          - port: "3306"
+            protocol: TCP
+
+
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: dvwa-mysql-fw
+  namespace: dvwa
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: mysql
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: dvwa
+  ingress:
+    - fromEndpoints:
+      - matchLabels:
+          "app.kubernetes.io/name": dvwa
+      toPorts:
+        - ports:
+          - port: "3306"
+            protocol: TCP
+  # Block all outbound
+  egress:
+    - {}
