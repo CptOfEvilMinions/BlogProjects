@@ -2,14 +2,14 @@
 # Install/Setup Nginx
 ####################################################################
 - name: Install/Setup Nginx
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
     - nginx
 
 - name: Backup nginx conf
-  copy:
+  ansible.builtin.copy:
     src: '/etc/nginx/nginx.conf'
     dest: '/etc/nginx/nginx.conf.bak'
     remote_src: true
@@ -18,28 +18,28 @@
     mode: '0400'
 
 - name: Create NGINX SSL dir
-  file:
+  ansible.builtin.file:
     path: '/etc/nginx/ssl'
     owner: root
     group: root
     state: directory
-    mode: 0400
+    mode: "0400"
 
 - name: Copy nginx.conf
-  template:
+  ansible.builtin.template:
     src: 'conf/nginx/nginx.conf'
     dest: '/etc/nginx/nginx.conf'
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Copy graylog.conf
-  template:
+  ansible.builtin.template:
     src: 'conf/nginx/graylog.conf'
     dest: '/etc/nginx/conf.d/graylog.conf'
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Generate DHParam
   openssl_dhparam:
@@ -72,7 +72,7 @@
     provider: selfsigned
 
 - name: Restart nginx to activate letsencrypt site
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
     enabled: true

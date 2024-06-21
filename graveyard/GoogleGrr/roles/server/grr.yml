@@ -2,7 +2,7 @@
 # Install/Setup Google Grr
 ####################################################################
 - name: Install software
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -10,10 +10,10 @@
     - libmysqlclient-dev
 
 - name: Download Google Grr setup script
-  get_url:
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/google/grr/master/scripts/install_script_ubuntu.sh
     dest: /tmp
-    mode: 0400
+    mode: "0400"
 
 ####################################################################
 # Setup questions
@@ -60,7 +60,7 @@
         - '{{ grr_password }}'
 
 - name: Start Google grr service
-  service:
+  ansible.builtin.service:
     name: grr-server
     state: restarted
     enabled: true

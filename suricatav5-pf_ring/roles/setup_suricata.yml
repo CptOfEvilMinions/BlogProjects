@@ -2,12 +2,12 @@
 # Download Suricata and install deps
 ##################################################################################
 - name: Check if pf_ring module is loaded
-  modprobe:
+  community.general.modprobe:
     name: 'pf_ring'
     state: present
 
 - name: Install deps
-  apt:
+  ansible.builtin.apt:
     name: [
       'libpcre3',
       'libpcre3-dbg',
@@ -43,13 +43,13 @@
   register: suricata_dir_stat
 
 - name: Download Suricata
-  get_url:
+  ansible.builtin.get_url:
     url: '{{ suricata_tar_url }}'
     dest: /tmp/suricata-{{ suricata_version }}.tar.gz
   when: not suricata_dir_stat.stat.exists
 
 - name: Create {{ suricata_dir }}
-  file:
+  ansible.builtin.file:
     path: '{{ suricata_dir }}'
     state: directory
     owner: root
@@ -57,7 +57,7 @@
   when: not suricata_dir_stat.stat.exists
 
 - name: Unarchive suricata-{{ suricata_version }}.tar.gz
-  unarchive:
+  ansible.builtin.unarchive:
     src: /tmp/suricata-{{ suricata_version }}.tar.gz
     dest: '{{ suricata_dir }}'
     remote_src: true
@@ -74,24 +74,24 @@
   register: suricata_conf_dir_stat
 
 - name: Configure Suricata
-  shell: '{{ suricata_configure }}'
+  ansible.builtin.shell: '{{ suricata_configure }}'
   args:
     chdir: '{{ suricata_dir }}'
   when: not suricata_conf_dir_stat.stat.exists
 
 - name: Make
-  make:
+  community.general.make:
     chdir: '{{ suricata_dir }}'
   when: not suricata_conf_dir_stat.stat.exists
 
 - name: Make install
-  make:
+  community.general.make:
     chdir: '{{ suricata_dir }}'
     target: install
   when: not suricata_conf_dir_stat.stat.exists
 
 - name: Make install-conf
-  shell: 'make install-conf'
+  ansible.builtin.shell: 'make install-conf'
   args:
     chdir: '{{ suricata_dir }}'
   when: not suricata_conf_dir_stat.stat.exists
@@ -106,44 +106,44 @@
   register: suricata_conf_dir_stat
 
 - name: Backup suricata.yaml
-  copy:
+  ansible.builtin.copy:
     src: '/etc/suricata/suricata.yaml'
     dest: /etc/suricata/suricata.yaml.bak'
     remote_src: true
     backup: true
-    mode: 0400
+    mode: "0400"
     owner: root
     group: root
   when: suricata_conf_dir_stat.stat.exists
 
 # https://docs.ansible.com/ansible/latest/user_guide/playbooks_advanced_syntax.html
 - name: Copy suricata.yaml
-  template:
+  ansible.builtin.template:
     src: 'conf/suricata/suricata.yaml.j2'
     dest: '/etc/suricata/suricata.yaml'
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   when: suricata_conf_dir_stat.stat.exists
 
 - name: Check if {{ suricata_username }} user exists
-  getent:
+  ansible.builtin.getent:
     database: 'passwd'
     key: '{{ suricata_username }}'
   ignore_errors: true
   register: user_stats
 
 - name: Create Suricata user
-  shell: 'adduser --disabled-login --shell /bin/false --system --home /nonexistent --no-create-home --ingroup root {{ suricata_username }}'
+  ansible.builtin.shell: 'adduser --disabled-login --shell /bin/false --system --home /nonexistent --no-create-home --ingroup root {{ suricata_username }}'
   when: user_stats is failed
 
 - name: Check if {{ suricata_username }} user exists, fail if it fails
-  getent:
+  ansible.builtin.getent:
     database: 'passwd'
     key: '{{ suricata_username }}'
 
 - name: Allow Suricata user to write to log directory
-  file:
+  ansible.builtin.file:
     path: '{{suricata_configure_localstatedir }}/log/suricata'
     state: directory
     owner: '{{ suricata_username }}'
@@ -151,29 +151,29 @@
     recurse: true
 
 - name: Copy /etc/default/suricata
-  template:
+  ansible.builtin.template:
     src: 'conf/suricata/default_suricata_pf-ring'
     dest: '/etc/default/suricata'
-    mode: 0640
+    mode: "0640"
     owner: root
     group: root
 
 - name: Copy Suricata init.d
-  template:
+  ansible.builtin.template:
     src: 'conf/suricata/suricata-pf_ring-init.sh'
     dest: '/etc/init.d/suricata'
-    mode: 0750
+    mode: "0750"
     owner: root
     group: root
 
 # shell: '/etc/init.d/suricata start'
 - name: Run Suricata init.d script
-  sysvinit:
+  ansible.builtin.sysvinit:
     name: 'suricata'
     state: started
 
 - name: Restart Suricata
-  service:
+  ansible.builtin.service:
     name: 'suricata'
     state: restarted
     enabled: true
@@ -182,30 +182,30 @@
 # Install Suricata rules manager
 ##################################################################################
 - name: Make Suricata rules directory
-  file:
+  ansible.builtin.file:
     path: '{{ suricata_configure_sysconfdir }}/suricata/rules'
     state: directory
     owner: root
     group: root
-    mode: 0640
+    mode: "0640"
 
 - name: Create empty rule files
-  file:
+  ansible.builtin.file:
     path: '{{ suricata_configure_sysconfdir }}/suricata/rules/{{ item }}'
     state: touch
     owner: root
     group: root
-    mode: 0640
+    mode: "0640"
   with_items:
     - 'disable.conf'
     - 'local.rules'
 
 # https://readthedocs.org/projects/suricata-update/downloads/pdf/latest/
 - name: Copy Update config
-  template:
+  ansible.builtin.template:
     src: 'conf/suricata/suricata_update.yaml'
     dest: '/etc/suricata/update.yaml'
-    mode: 0640
+    mode: "0640"
     owner: root
     group: root
 
@@ -215,15 +215,15 @@
   register: suricata_rules_dir
 
 - name: Init Suricata rules
-  shell: 'suricata-update'
+  ansible.builtin.shell: 'suricata-update'
   when: not suricata_rules_dir.stat.exists
 
 - name: Update Suricata sources
-  shell: 'suricata-update update-sources'
+  ansible.builtin.shell: 'suricata-update update-sources'
   when: not suricata_rules_dir.stat.exists
 
 - name: Enable Suricata rule sources
-  shell: 'suricata-update enable-source {{ item }}'
+  ansible.builtin.shell: 'suricata-update enable-source {{ item }}'
   with_items:
     - 'et/open'
     - 'oisf/trafficid'
@@ -235,10 +235,10 @@
   when: not suricata_rules_dir.stat.exists
 
 - name: Update Suricata rules
-  shell: 'suricata-update'
+  ansible.builtin.shell: 'suricata-update'
 
 - name: Restart Suricata
-  service:
+  ansible.builtin.service:
     name: 'suricata'
     state: restarted
     enabled: true

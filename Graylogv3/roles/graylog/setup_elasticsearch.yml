@@ -2,21 +2,21 @@
 # Install/Setup Elasticsearch
 ################################################################
 - name: Add Elasticsearch key
-  apt_key:
+  ansible.builtin.apt_key:
     url: '{{ es_key }}'
     state: present
 
 - name: Add Elasticsearch Repo
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: '{{ es_repo_url }}'
     state: present
 
 - name: Run the equivalent of "apt-get update" as a separate step
-  apt:
+  ansible.builtin.apt:
     update_cache: true
 
 - name: Install Elasticsearch
-  apt:
+  ansible.builtin.apt:
     name: 'elasticsearch-oss'
     state: latest
 
@@ -33,7 +33,7 @@
     create: true
 
 - name: Start Elasticsearch service
-  service:
+  ansible.builtin.service:
     name: 'elasticsearch'
     state: restarted
     enabled: true

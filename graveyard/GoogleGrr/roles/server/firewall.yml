@@ -2,21 +2,21 @@
 #  Setup Firewall
 ####################################################################
 - name: Setup Ubuntu UFW firewall
-  ufw:
+  community.general.ufw:
     rule: allow
     name: OpenSSH
-- ufw:
+- community.general.ufw:
     rule: allow
     port: 80
     proto: tcp
-- ufw:
+- community.general.ufw:
     rule: allow
     port: 443
     proto: tcp
-- ufw:
+- community.general.ufw:
     rule: allow
     port: 8000
     proto: tcp
-- ufw:
+- community.general.ufw:
     state: enabled
     policy: deny

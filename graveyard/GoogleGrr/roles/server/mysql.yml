@@ -2,7 +2,7 @@
 #  Install/Setup MySQL
 ####################################################################
 - name: Install/Setup MySQL
-  package:
+  ansible.builtin.package:
     name: '{{ item }}'
     state: latest
   with_items:
@@ -11,7 +11,7 @@
     - python3-pip
 
 - name: Start MySQL service
-  service:
+  ansible.builtin.service:
     name: mysql.service
     state: restarted
     enabled: true
