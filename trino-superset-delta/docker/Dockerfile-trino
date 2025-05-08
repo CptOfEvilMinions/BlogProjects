@@ -1,0 +1,12 @@
+FROM trinodb/trino:474
+
+
+######### Configs #########
+COPY conf/trino/config.properties /etc/trino/config.properties
+COPY conf/trino/node.properties /etc/trino/node.properties
+COPY conf/trino/jvm.config /etc/trino/jvm.config
+
+######### catalogs #########
+RUN mkdir -p /etc/trino/catalog
+COPY conf/trino/delta.properties /etc/trino/catalog/delta.properties
+COPY conf/trino/hive.properties /etc/trino/catalog/hive.properties
