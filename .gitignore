@@ -3,3 +3,4 @@ venv/
 microk8s/synology-storage/client-info.yml
 microk8s/dex/freeipa-dex-ldap-groups.yaml
 **/charts/*.tgz
+.DS_Store

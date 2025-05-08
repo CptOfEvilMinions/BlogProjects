@@ -1,0 +1,21 @@
+FROM apache/hive:4.0.1
+
+ENV HADOOP_VERSION="3.4.1"
+ARG AWS_BUNDLE_VERSION="2.31.12"
+ARG PGJDBC_VERSION="42.7.5"
+
+USER root
+RUN apt-get update -y && apt-get install curl -y
+
+##### Download deps #####
+RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-common/${HADOOP_VERSION}/hadoop-common-${HADOOP_VERSION}.jar --output /opt/hive/lib/hadoop-common-${HADOOP_VERSION}.jar
+RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-auth/${HADOOP_VERSION}/hadoop-auth-${HADOOP_VERSION}.jar --output /opt/hive/lib/hadoop-auth-${HADOOP_VERSION}.jar
+RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/${HADOOP_VERSION}/hadoop-aws-${HADOOP_VERSION}.jar --output /opt/hive/lib/hadoop-aws-${HADOOP_VERSION}.jar
+RUN curl https://repo1.maven.org/maven2/software/amazon/awssdk/bundle/${AWS_BUNDLE_VERSION}/bundle-${AWS_BUNDLE_VERSION}.jar --output /opt/hive/lib/bundle-${AWS_BUNDLE_VERSION}.jar
+RUN curl https://repo1.maven.org/maven2/software/amazon/awssdk/s3/${AWS_BUNDLE_VERSION}/s3-${AWS_BUNDLE_VERSION}.jar --output /opt/hive/lib/s3-${AWS_BUNDLE_VERSION}.jar
+
+RUN curl https://jdbc.postgresql.org/download/postgresql-${PGJDBC_VERSION}.jar --output /opt/hive/lib/postgresql-${PGJDBC_VERSION}.jar
+
+USER hive
+
+COPY conf/metastore/core-site.xml /opt/hadoop/etc/hadoop/core-site.xml

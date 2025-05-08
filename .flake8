@@ -7,5 +7,6 @@ exclude =
     docs/source/conf.py,
     old,
     build,
-    dist
+    dist,
+    .ansible
 max-complexity = 10
