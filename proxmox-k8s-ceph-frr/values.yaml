@@ -1,0 +1,42 @@
+---
+nodeplugin:
+  nodeSelector:
+    node.kubernetes.io/microk8s-worker: microk8s-worker
+
+provisioner:
+  replicaCount: 2
+  enableHostNetwork: true
+  nodeSelector:
+    node.kubernetes.io/microk8s-worker: microk8s-worker
+  httpMetrics:
+    containerPort: 8082
+
+
+csiConfig:
+  - clusterID: {{ ceph_cluster_id }}
+    monitors:
+      ###### IPv6 using CEPH mon v2 ######
+      # - "[v2:[{{ ceph_public_net }}::1]:3300/0,v1:[fd00::1]:6789/0]"
+      # - "[v2:[{{ ceph_public_net }}::2]:3300/0,v1:[fd00::2]:6789/0]"
+      # - "[v2:[{{ ceph_public_net }}::3]:3300/0,v1:[fd00::3]:6789/0]"
+      ###### IPv6 using CEPH mon legacy ######
+      - "[{{ ceph_public_net }}::1]:6789"
+      - "[{{ ceph_public_net }}::2]:6789"
+      - "[{{ ceph_public_net }}::3]:6789"
+    cephFS:
+      subvolumeGroup: "csi"
+secret:
+  name: csi-cephfs-secret
+  create: false
+storageClass:
+  create: true
+  name: k8s-cephfs-sc
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  clusterID: {{ ceph_cluster_id }}
+  fsName: kubernetes
+  reclaimPolicy: Delete
+  allowVolumeExpansion: true
+
+# https://github.com/rook/rook/issues/12556
+kubeletDir: /var/snap/microk8s/common/var/lib/kubelet
