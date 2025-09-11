@@ -1,0 +1,6 @@
+terraform/s3_state_bucket/.terraform
+terraform/s3_state_bucket/terraform.tfstate
+terraform/variables.tf
+logs/*
+terraform/.terraform
+terraform/.terraform/terraform.tfstate
