@@ -1,0 +1,11 @@
+variable "primary_region" {
+  default = "us-west-2"
+}
+
+variable "project_prefix" {
+  default = "btv-dc30"
+}
+
+variable "databricks_external_id" {
+  default = "0000"
+}
