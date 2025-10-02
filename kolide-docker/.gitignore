@@ -1,3 +1,0 @@
-conf/nginx/certs/*
-conf/prometheus/prometheus.yml
-swarmprom/

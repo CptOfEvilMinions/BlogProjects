@@ -1,4 +1,0 @@
-- hosts: win_agents
-  tasks:
-    - win_ping:
-    - ansible.builtin.import_tasks: roles/win_agents/deploy_cagent.yml

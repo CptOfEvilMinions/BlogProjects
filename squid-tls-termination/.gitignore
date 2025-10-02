@@ -1,7 +1,0 @@
-conf/tls/*
-!conf/tls/openssl.conf.example
-*.crt
-*.json
-*.csr
-*.key
-*DS_Store

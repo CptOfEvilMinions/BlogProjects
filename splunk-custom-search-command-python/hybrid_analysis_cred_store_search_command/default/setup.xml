@@ -1,8 +1,0 @@
-<setup>
-  <block title="Enter Hybrid Analysis API key" endpoint="storage/passwords" entity="hybridanalysis*" mode="iter" eai_strict="false">
-    <input field="password">
-      <label>Hybrid Analysis API key</label>
-      <type>password</type>
-    </input>
-  </block>
-</setup>

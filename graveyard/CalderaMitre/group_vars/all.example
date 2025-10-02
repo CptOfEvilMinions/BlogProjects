@@ -1,7 +1,0 @@
-base_domain:
-caldera_hostname: caldera
-timezone: America/New_York
-
-caldera_dir: /opt/caldera
-caldera_user: admin
-caldera_pass:

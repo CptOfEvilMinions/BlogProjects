@@ -1,7 +1,0 @@
-conf/tls/**/*.crt
-conf/tls/**/*.key
-conf/tls/**/*.csr
-conf/tls/**/*.json
-venv/
-conf/vault/vault_setup.yaml
-.DS_Store

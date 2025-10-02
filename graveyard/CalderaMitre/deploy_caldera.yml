@@ -1,9 +1,0 @@
-- hosts: caldera
-  become: true
-  become_user: root
-  tasks:
-    - ansible.builtin.import_tasks: roles/init.yml
-    - ansible.builtin.import_tasks: roles/caldera/mongo.yml
-    - ansible.builtin.import_tasks: roles/caldera/caldera.yml
-    # - import_tasks: roles/caldera/nginx.yml
-    - ansible.builtin.import_tasks: roles/caldera/firewall.yml

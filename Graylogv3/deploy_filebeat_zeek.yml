@@ -1,7 +1,0 @@
-- hosts: 'filebeat-agents'
-  become: true
-  become_user: root
-  tasks:
-    - ansible.builtin.include_vars: 'group_vars/graylog.yml'
-    - ansible.builtin.include_vars: 'group_vars/logging.yml'
-    - ansible.builtin.import_tasks: 'roles/filebeat/setup_filebeat.yml'

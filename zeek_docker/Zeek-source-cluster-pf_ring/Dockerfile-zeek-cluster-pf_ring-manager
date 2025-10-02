@@ -1,7 +1,0 @@
-# Install pf_ring
-RUN apt-get update && \
-    apt-get -y -q install wget lsb-release && \
-    wget -q http://apt.ntop.org/16.04/all/apt-ntop.deb && dpkg -i apt-ntop.deb && \
-    apt-get clean all && \
-    apt-get update && \
-    apt-get -y install pfring

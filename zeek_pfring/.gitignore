@@ -1,3 +1,0 @@
-group_vars/all.yml
-conf/zeek/networks.cfg
-*.retry

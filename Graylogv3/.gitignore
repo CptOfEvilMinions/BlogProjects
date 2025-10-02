@@ -1,4 +1,0 @@
-group_vars/all.yml
-*.retry
-group_vars/logging.yml
-group_vars/graylog.yml

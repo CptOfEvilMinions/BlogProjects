@@ -1,8 +1,0 @@
-*.pyc
-*.retry
-.DS_Store
-env/
-group_vars/all.yml
-group_vars/splunk.yml
-files/splunk/splunkforwarder.deb
-conf/nginx/cert/*

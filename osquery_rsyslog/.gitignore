@@ -1,3 +1,0 @@
-group_vars/all.yml
-group_vars/logging.yml
-*.retry

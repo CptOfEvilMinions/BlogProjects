@@ -1,4 +1,0 @@
-conf/tls/mutual_tls/*
-conf/tls/root_ca/*
-conf/tls/signed_cert/*
-conf/tls/client_cert/*

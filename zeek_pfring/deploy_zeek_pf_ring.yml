@@ -1,7 +1,0 @@
-- hosts: 'zeek'
-  become: true
-  become_user: root
-  tasks:
-    - ansible.builtin.import_tasks: 'roles/zeek/init.yml'
-    - ansible.builtin.import_tasks: 'roles/zeek/setup_pf_ring.yml'
-    - ansible.builtin.import_tasks: 'roles/zeek/setup_zeek.yml'

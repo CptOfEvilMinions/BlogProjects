@@ -1,7 +1,0 @@
-- name: Install Osquery on Windows
-  hosts: win_agents
-  tasks:
-    - name: Install osquery
-      ansible.builtin.import_tasks: 'roles/win_client/setup_osquery.yml'
-    - name: Install Filebeat
-      ansible.builtin.import_tasks: 'roles/win_client/setup_filebeat.yml'

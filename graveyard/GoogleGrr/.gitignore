@@ -1,3 +1,0 @@
-*.retry
-group_vars/all
-group_vars/grr

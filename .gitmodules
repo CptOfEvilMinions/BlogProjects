@@ -1,4 +1,0 @@
-[submodule "microk8s/synology-storage/synology-csi"]
-	path = microk8s/synology-storage/synology-csi
-	url = https://github.com/SynologyOpenSource/synology-csi.git
-	ignore = dirty

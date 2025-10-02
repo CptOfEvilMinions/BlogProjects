@@ -1,7 +1,0 @@
----
-clients:
-  - host: 192.168.1.10
-    port: 5001
-    https: true
-    username: <username>
-    password: <password>

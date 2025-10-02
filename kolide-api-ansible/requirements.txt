@@ -1,3 +1,0 @@
-pyyaml==5.3.1
-requests==2.24.0
-websocket==0.2.1

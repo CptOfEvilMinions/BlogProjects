@@ -1,8 +1,0 @@
-{
-  "vm_name": "Win10x64-VM-template",
-  "template_description": "Windows 10 64-bit Enterprise template built with Packer - {{isotime \"2006-01-02 03:04:05\"}}",
-  "iso_file": "ISO-storage:iso/16299.15.170928-1534.rs3_release_CLIENTENTERPRISEEVAL_OEMRET_x64FRE_en-us.iso",
-  "vm_cpu_cores": 4,
-  "vm_memory": 4096,
-  "vm_disk_size": "60G"
-}

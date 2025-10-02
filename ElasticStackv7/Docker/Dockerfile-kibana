@@ -1,3 +1,0 @@
-ARG KIBANA_VERSION
-FROM docker.elastic.co/kibana/kibana:${KIBANA_VERSION}
-COPY conf/kibana/kibana.yml /usr/share/kibana/config/kibana.yml

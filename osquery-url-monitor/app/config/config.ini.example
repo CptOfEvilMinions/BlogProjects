@@ -1,7 +1,0 @@
-[docker]
-kafka_server = kafka
-kafka_port = 29092
-kafka_osquery_raw_topic = osquery-raw
-kafka_osquery_enriched_topic = osquery-enriched
-
-vti_api_key=<virustotal key here>

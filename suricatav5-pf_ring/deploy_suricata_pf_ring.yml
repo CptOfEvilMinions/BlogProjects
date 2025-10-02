@@ -1,9 +1,0 @@
-- hosts: 'suricata'
-  become: true
-  become_user: root
-  tasks:
-    - ansible.builtin.include_vars: 'group_vars/sec_tools.yml'
-    # Install pf_ring
-    - ansible.builtin.import_tasks: 'roles/setup_pf_ring.yml'
-    # Instal Suricata
-    - ansible.builtin.import_tasks: 'roles/setup_suricata.yml'

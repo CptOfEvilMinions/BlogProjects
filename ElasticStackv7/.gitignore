@@ -1,3 +1,0 @@
-conf/ssl/*.key
-conf/ssl/*.crt
-conf/ssl/dhparam.pem

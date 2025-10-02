@@ -1,9 +1,0 @@
-FROM nginx:1.17.8-alpine
-
-RUN mkdir /etc/nginx/ssl
-COPY conf/tls/kolide/*.crt /etc/nginx/ssl/kolide.crt
-COPY conf/tls/kolide/*.key /etc/nginx/ssl/kolide.key
-COPY conf/tls/root_ca/*.crt /etc/nginx/ssl/client_CA.crt
-
-COPY conf/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY conf/nginx/kolide.conf /etc/nginx/conf.d/kolide.conf
