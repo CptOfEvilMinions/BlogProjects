@@ -3,13 +3,13 @@ entries:
   dvwa:
   - apiVersion: v2
     appVersion: 9ca729d
-    created: "2025-10-02T17:10:50.642042858Z"
+    created: "2025-10-02T17:30:57.287107432Z"
     dependencies:
     - name: mysql
       repository: https://charts.bitnami.com/bitnami
       version: 10.1.0
     description: A Helm chart for DVWA
-    digest: 836e3f8e1a508460f718fc84f1d177aaac28d64df8c551014aa7cdfe29af964b
+    digest: f94d18d38d0364f24d5ec4172025aa4b7c54e3a85c901bb1374ca8e2c6084a96
     name: dvwa
     type: application
     urls:
@@ -17,7 +17,7 @@ entries:
     version: 0.1.0
   k8s-jupyter-spark-minio:
   - apiVersion: v2
-    created: "2025-10-02T17:10:50.649281529Z"
+    created: "2025-10-02T17:30:57.294727398Z"
     dependencies:
     - name: spark
       repository: https://charts.bitnami.com/bitnami
@@ -29,10 +29,10 @@ entries:
       repository: https://charts.min.io
       version: 5.0.14
     description: A Helm chart for k8s-jupyter-spark-minio
-    digest: d868db044f9d176c898435e71a8acd2637651b219a9103f92fd2a22d76a5d5b1
+    digest: ce1e18d53cda49bc5f6a5b647bcf25aed1250cc28fdad56c049769e89029e86d
     name: k8s-jupyter-spark-minio
     type: application
     urls:
     - https://cptofevilminions.github.io/BlogProjects/k8s-jupyter-spark-minio-0.1.0.tgz
     version: 0.1.0
-generated: "2025-10-02T17:10:50.638591951Z"
+generated: "2025-10-02T17:30:57.282626706Z"
