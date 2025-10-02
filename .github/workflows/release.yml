@@ -22,11 +22,6 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
-      - name: Package charts
-        run: |
-          mkdir -p docs
-          helm package charts/* -d docs
-
       - name: Update Helm dependencies
         run: |
           for dir in charts/*/; do
