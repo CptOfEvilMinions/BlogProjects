@@ -27,10 +27,19 @@ jobs:
           mkdir -p docs
           helm package charts/* -d docs
 
+      - name: Update Helm dependencies
+        run: |
+          for dir in charts/*/; do
+            helm dependency update "$dir"
+          done
+
       - name: Package charts
         run: |
           mkdir -p docs
-          helm package charts/* -d docs
+          for dir in charts/*/; do
+            helm dependency update "$dir"
+            helm package "$dir" -d docs
+          done
 
       - name: Generate index.yaml
         run: |
