@@ -4,43 +4,52 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'charts/**'
-      - '.github/workflows/release.yml'
+  workflow_dispatch:
 
 jobs:
   release:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Helm
         uses: azure/setup-helm@v4
+        with:
+          version: v3.15.3
 
-      - name: Update Helm dependencies
+      - name: Find chart directories
+        id: find_charts
         run: |
-          for dir in charts/*/; do
-            helm dependency update "$dir"
+          # Scan all top-level directories for Chart.yaml
+          echo "CHART_DIRS="
+          dirs=""
+          for dir in */; do
+            if [ -f "$dir/Chart.yaml" ]; then
+              dirs="$dirs $dir"
+            fi
           done
+          echo "Found chart directories:$dirs"
+          # Save for later steps
+          echo "CHART_DIRS=$dirs" >> $GITHUB_ENV
 
-      - name: Package charts
+      - name: Package and update dependencies
         run: |
           mkdir -p docs
-          for dir in charts/*/; do
+          for dir in $CHART_DIRS; do
+            echo "Processing chart directory: $dir"
+            # Update dependencies if any
             helm dependency update "$dir"
+            # Package chart
             helm package "$dir" -d docs
           done
 
-      - name: Generate index.yaml
+      - name: Generate Helm repo index
         run: |
           helm repo index docs --url https://cptofevilminions.github.io/BlogProjects
 
-      - name: Commit and push chart repo to gh-pages
+      - name: Commit and push to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
