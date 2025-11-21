@@ -1,0 +1,116 @@
+services:
+  ######################################################################## teamserver ########################################################################
+  teamserver:
+    image: sliver-teamserver:${SLIVER_VERSION}
+    container_name: sliver-teamserver
+    build:
+      context: .
+      target: teamserver
+      dockerfile: docker/Dockerfile-sliver-source
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.teamserver.rule=Host(`malware.hackinglab.local`)"
+      - "traefik.http.routers.teamserver.entrypoints=websecure"
+      - "traefik.http.routers.teamserver.tls=true"
+      - "traefik.http.services.teamserver.loadbalancer.server.port=8000"
+      - external-dns-zone=hackinglab.local
+      - external-dns-record=malware
+    ports:
+      - 1337:1337
+      - 5000-5005:5000-5005
+    networks:
+      - default
+      - sliver-backend
+      - traefik_traefik-net
+    volumes:
+      - teamserver:/home/sliver:rw
+      - payloads:/payloads:ro
+      - configs:/configs:rw
+
+  ######################################################################## client ########################################################################
+  client:
+    image: sliver-client:${SLIVER_VERSION}
+    container_name: sliver-client
+    build:
+      context: .
+      target: client
+      dockerfile: docker/Dockerfile-sliver-source
+    tty: true
+    restart: unless-stopped
+    networks:
+      - sliver-backend
+    volumes:
+      - client:/home/sliver:rw
+      - payloads:/payloads:rw
+      - configs:/configs:ro
+    depends_on:
+      - teamserver
+
+
+  ######################################################################## builders ########################################################################
+  builder-linux:
+    image: sliver-builder-linux:${SLIVER_VERSION}
+    container_name: sliver-builder-linux
+    hostname: builder-linux
+    build:
+      context: .
+      target: builder-linux
+      dockerfile: docker/Dockerfile-sliver-source
+    restart: unless-stopped
+    networks:
+      - sliver-backend
+    volumes:
+      - builder-linux:/home/sliver:rw
+      - payloads:/payloads:rw
+      - configs:/configs:ro
+    depends_on:
+      - teamserver
+
+  builder-windows:
+    image: sliver-builder-windows:${SLIVER_VERSION}
+    container_name: sliver-builder-windows
+    hostname: builder-windows
+    build:
+      context: .
+      target: builder-windows
+      dockerfile: docker/Dockerfile-sliver-source
+    restart: unless-stopped
+    networks:
+      - sliver-backend
+    volumes:
+      - builder-windows:/home/sliver:rw
+      - payloads:/payloads:rw
+      - configs:/configs:ro
+    depends_on:
+      - teamserver
+
+  ######################################################################## fileserver ########################################################################
+  fileserver:
+    image: python:3.12-slim
+    command: ["python3", "-m", "http.server", "8000", "--directory", "/payloads"]
+    container_name: sliver-fileserver
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    networks:
+      - default
+      - sliver-backend
+    volumes:
+      - payloads:/payloads:ro
+    depends_on:
+      - teamserver
+
+volumes:
+  teamserver:
+  payloads:
+  configs:
+  client:
+  builder-linux:
+  builder-musl:
+  builder-windows:
+
+networks:
+  sliver-backend:
+  traefik_traefik-net:
+    external: true
