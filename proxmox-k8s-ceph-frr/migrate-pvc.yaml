@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-kube-prometheus-prometheus-0-clone
+  namespace: monitoring
+spec:
+  storageClassName: k8s-cephfs-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1000Gi
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-rsync
+  namespace: monitoring
+spec:
+  containers:
+    - name: rsync
+      image: eeacms/rsync:2.6
+      command: ["rsync", "-azP", "/mnt/src/.", "/mnt/dest"]
+      volumeMounts:
+        - mountPath: /mnt/src # Mount PVC-1 here
+          name: src
+        - mountPath: /mnt/dest # Mount PVC-2 here
+          name: dest
+  volumes:
+    - name: src
+      persistentVolumeClaim:
+      claimName: prometheus-kube-prometheus-prometheus-0 # Attach PVC-1 to volume-1
+    - name: dest
+      persistentVolumeClaim:
+      claimName: prometheus-kube-prometheus-prometheus-0-clone # Attach PVC-2 to volume-2
