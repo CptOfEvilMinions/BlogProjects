@@ -1,7 +1,6 @@
 org_settings:
   yara_rules:
     - path: ./lib/yara_rules/malware_rules.yar
-    - path: ./lib/yara_rules/cve_rules.yar
     - path: ./lib/yara_rules/mcp_rules.yar
 
 controls:

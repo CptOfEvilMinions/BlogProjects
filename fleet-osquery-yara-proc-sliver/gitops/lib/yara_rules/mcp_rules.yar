@@ -1,7 +1,7 @@
 rule ssh_private_key
 {
     meta:
-        author      = "Ben"
+        author      = "CptOfEvilMinions"
         description = "Detects OpenSSH private key material resident in process memory"
         reference   = "https://holdmybeersecurity.com"
         date        = "2026-07-08"
