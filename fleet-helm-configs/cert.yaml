@@ -1,0 +1,25 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: fleet-hackinglab-local-cert
+  namespace: fleet
+spec:
+  secretName: fleet-hackinglab-local-cert
+  privateKey:
+    rotationPolicy: Always
+    algorithm: RSA
+    encoding: PKCS1
+    size: 4096
+  duration: 2190h # 3 months
+  renewBefore: 168h # 1 week
+  subject:
+    organizations:
+      - hackinglab
+  isCA: false
+  commonName: fleet.hackinglab.local
+  dnsNames:
+    - fleet.hackinglab.local
+  issuerRef:
+    name: hackinglab-local-vault-issuer
+    kind: ClusterIssuer

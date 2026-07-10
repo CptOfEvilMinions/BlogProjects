@@ -1,0 +1,14 @@
+org_settings:
+  yara_rules:
+    - path: ./lib/yara_rules/malware_rules.yar
+    - path: ./lib/yara_rules/mcp_rules.yar
+
+controls:
+
+agent_options:
+  config:
+    options:
+      yara_sigurl_authenticate: true
+    yara:
+      signature_urls:
+        - https://fleet.hackinglab.local/api/osquery/yara/.*

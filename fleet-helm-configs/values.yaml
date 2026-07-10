@@ -1,0 +1,45 @@
+replicas: 1
+
+mysql:
+  enabled: true
+  auth:
+    username: fleet
+    password: Changem123!
+    database: fleet
+  primary:
+    livenessProbe:
+      initialDelaySeconds: 120
+    readinessProbe:
+      initialDelaySeconds: 60
+
+redis:
+  enabled: true
+
+fleet:
+  tls:
+    enabled: false
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: fleet.hackinglab.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: fleet-hackinglab-local-cert
+      hosts:
+        - fleet.hackinglab.local
+
+database:
+  secretName: fleet-mysql
+  address: fleet-mysql:3306
+  database: fleet
+  username: fleet
+
+cache:
+  address: fleet-valkey:6379
