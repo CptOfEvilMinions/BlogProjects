@@ -1,0 +1,49 @@
+{
+  "mcpServers": {
+    "code-quality": {
+      "command": "node",
+      "args": [
+        "/home/superadmin/mcp-vulnerability/filesystem-manipulation-mcp/build/index.js"
+      ]
+    }
+  },
+  "coworkUserFilesPath": "/home/superadmin/Claude",
+  "preferences": {
+    "coworkScheduledTasksEnabled": false,
+    "coworkHipaaRestricted": false,
+    "ccdScheduledTasksEnabled": false,
+    "bypassPermissionsGateByAccount": {
+      "8f115f64-bad5-4cec-8966-167f0cb56cae": false
+    },
+    "coworkWebSearchEnabled": true,
+    "coworkModelAutoFallbackByAccount": {
+      "8f115f64-bad5-4cec-8966-167f0cb56cae": true
+    },
+    "remoteToolsDeviceName": "superadmin-vmware-virtual-platform",
+    "epitaxyPrefs": {
+      "starred-local-code-sessions": [],
+      "starred-cowork-spaces": [],
+      "starred-session-groups": [],
+      "ccd-sessions-filter": {
+        "state": {
+          "selectedProjects": []
+        },
+        "version": 0
+      },
+      "desktop-frame.paneStore.v1": {
+        "state": {
+          "extraPanesByMode": {},
+          "colWeightsByMode": {},
+          "rowSplit": 0.5,
+          "draftNonce": 0
+        },
+        "version": 4
+      },
+      "dframe-local-slice": {
+        "pinnedOrder": [],
+        "customGroupAssignments": {},
+        "customGroupOrder": {}
+      }
+    }
+  }
+}
