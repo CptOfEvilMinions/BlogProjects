@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: check-ast
       - id: check-json
@@ -23,6 +23,10 @@ repos:
       - id: check-xml
       - id: detect-aws-credentials
       - id: detect-private-key
+        exclude: |
+          (?x)(
+            fleet-osquery-yara-proc-sliver/gitops/lib/yara_rules/mcp_rules.yar|
+          )
       - id: check-yaml
         exclude: |
           (?x)(
@@ -49,19 +53,19 @@ repos:
 
 
   - repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 26.5.1
     hooks:
       - id: black
 
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+    rev: 7.3.0
     hooks:
       - id: flake8
 
 
   - repo: https://github.com/PyCQA/pylint
-    rev: v3.1.0
+    rev: v4.0.6
     hooks:
       - id: pylint
 
@@ -76,13 +80,13 @@ repos:
 
 
   - repo: https://github.com/ansible/ansible-lint
-    rev: v24.2.3
+    rev: v26.6.0
     hooks:
       - id: ansible-lint
 
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.89.1
+    rev: v1.108.0
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
