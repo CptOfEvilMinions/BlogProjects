@@ -1,0 +1,9 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens19:
+        dhcp4: false
+        dhcp6: false
+        optional: true # Mark as optional, so it doesn't cause issues if not available on boot
+        mtu: 9000
